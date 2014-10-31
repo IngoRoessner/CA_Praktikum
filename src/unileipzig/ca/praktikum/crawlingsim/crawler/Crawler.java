@@ -37,45 +37,21 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 	}
 	
-	public void runParallel(List<String> seed, int takesPerStep){
-		this.stepQualityOut.open();
-		ConcurrentHashMap<String, Boolean> done = new ConcurrentHashMap<String, Boolean>();
-		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
-		while(!urlQueue.isEmpty()){
-			urlQueue.parallelStream()
-				.limit(takesPerStep)
-				.forEachOrdered(url->{		
-					PriorityQueue<String> urlTakes = new PriorityQueue<String>();
-					webGraph.get(url).stream()
-						.filter(urlElement -> !done.containsKey(urlElement))
-						.forEach(urlElement -> {
-							done.put(urlElement, true);
-							urlTakes.add(urlElement);						
-						});
-					this.addUrlTakesToQueue(urlQueue, urlTakes);
-				});
-			this.stepQualityOut.printStepQuality(done);
-		}
-		this.stepQualityOut.close();
-	}
-	
 	public void run(List<String> seed, int takesPerStep){
 		this.stepQualityOut.open();
-		Set<String> done = new HashSet<String>();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
+		Set<String> done = new HashSet<String>();
 		while(!urlQueue.isEmpty()){
-			urlQueue.stream()
-				.limit(takesPerStep)
-				.forEach(url->{		
-					PriorityQueue<String> urlTakes = new PriorityQueue<String>();
-					webGraph.get(url).stream()
-						.filter(urlElement -> !done.contains(urlElement))
-						.forEach(urlElement -> {
-							done.add(urlElement);
-							urlTakes.add(urlElement);						
-						});
-					this.addUrlTakesToQueue(urlQueue, urlTakes);
-				});
+			for(int i = 0; i<takesPerStep; i++){
+				//no direct add to urlQueue as preparation for additional strategies
+				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
+				String url = urlQueue.poll();
+				done.add(url);
+				webGraph.get(url).stream()
+					.filter(urlElement -> !done.contains(urlElement))
+					.forEach(urlElement -> urlTakes.add(urlElement));						
+				this.addUrlTakesToQueue(urlQueue, urlTakes);
+			}
 			this.stepQualityOut.printStepQuality(done);
 		}
 		this.stepQualityOut.close();
