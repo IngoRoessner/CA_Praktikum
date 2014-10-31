@@ -1,0 +1,8 @@
+http://example.com/a	http://example.com/b
+http://example.com/a	http://example.com/a
+http://example.com/a	http://example.com/e
+http://example.com/b	http://example.com/a
+http://example.com/b	http://example.com/c
+http://example.com/c	http://example.com/a
+http://example.com/c	http://example.com/d
+http://example.com/d	http://example.com/e

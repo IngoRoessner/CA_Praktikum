@@ -1,5 +1,6 @@
 package unileipzig.ca.praktikum.crawlingsim.crawler;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Crawler {
 		this.init(webGraph, qualityInfo, stepQualityOut);
 	}
 	
-	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath){
+	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws IOException{
 		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
 		WebGraph graph = new WebGraph(graphFilePath);
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath, qinfo);
@@ -47,7 +48,7 @@ public class Crawler {
 				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
 				String url = urlQueue.poll();
 				done.add(url);
-				webGraph.get(url).stream()
+				webGraph.linksFrom(url).stream()
 					.filter(urlElement -> !done.contains(urlElement))
 					.forEach(urlElement -> urlTakes.add(urlElement));						
 				this.addUrlTakesToQueue(urlQueue, urlTakes);
