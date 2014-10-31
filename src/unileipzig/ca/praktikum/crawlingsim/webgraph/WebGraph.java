@@ -21,6 +21,9 @@ public class WebGraph {
 				if(!this.edges.containsKey(pair[0])){
 					this.edges.put(pair[0], new LinkedList<String>());
 				}
+				if(!this.edges.containsKey(pair[1])){
+					this.edges.put(pair[1], new LinkedList<String>());
+				}
 				List<String> links = this.edges.get(pair[0]);
 				links.add(pair[1]);
 			}

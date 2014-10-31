@@ -1,13 +1,16 @@
 package unileipzig.ca.praktikum.crawlingsim.crawler;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.stream.Collectors;
 
 import unileipzig.ca.praktikum.crawlingsim.quality.QualityInfo;
 import unileipzig.ca.praktikum.crawlingsim.webgraph.WebGraph;
@@ -17,9 +20,10 @@ public class Crawler {
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
 	
-	static void commandLineCall(String[] args){
+	public static void main(String[] args){
 		
 	}
+	
 	
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut){
 		this.init(webGraph, qualityInfo, stepQualityOut);
@@ -43,7 +47,7 @@ public class Crawler {
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
 		Set<String> done = new HashSet<String>();
 		while(!urlQueue.isEmpty()){
-			for(int i = 0; i<takesPerStep; i++){
+			for(int i = 0; i<takesPerStep && !urlQueue.isEmpty(); i++){
 				//no direct add to urlQueue as preparation for additional strategies
 				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
 				String url = urlQueue.poll();
