@@ -1,16 +1,11 @@
 package unileipzig.ca.praktikum.crawlingsim.crawler;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.stream.Collectors;
 
 import unileipzig.ca.praktikum.crawlingsim.quality.QualityInfo;
 import unileipzig.ca.praktikum.crawlingsim.webgraph.WebGraph;
