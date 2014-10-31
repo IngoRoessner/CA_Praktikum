@@ -1,10 +1,10 @@
-package unileipzig.ca.praktikum.crawlingsim.crawler;
+package uni.ca.crawlingsim.crawler;
 
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import unileipzig.ca.praktikum.crawlingsim.quality.QualityInfo;
+import uni.ca.crawlingsim.quality.QualityInfo;
 
 public class StepQualityOut {
 

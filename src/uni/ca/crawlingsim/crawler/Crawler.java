@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.crawler;
+package uni.ca.crawlingsim.crawler;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import unileipzig.ca.praktikum.crawlingsim.quality.QualityInfo;
-import unileipzig.ca.praktikum.crawlingsim.webgraph.WebGraph;
+import uni.ca.crawlingsim.quality.QualityInfo;
+import uni.ca.crawlingsim.webgraph.WebGraph;
 
 public class Crawler {
 	private WebGraph webGraph;

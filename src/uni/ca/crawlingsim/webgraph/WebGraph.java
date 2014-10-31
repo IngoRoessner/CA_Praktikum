@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.webgraph;
+package uni.ca.crawlingsim.webgraph;
 
 import java.io.IOException;
 import java.nio.file.Files;

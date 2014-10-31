@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.quality;
+package uni.ca.crawlingsim.quality;
 
 import java.io.IOException;
 import java.nio.file.Files;

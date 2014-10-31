@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.tests;
+package uni.ca.crawlingsim.tests;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
-import unileipzig.ca.praktikum.crawlingsim.quality.QualityInfo;
+import uni.ca.crawlingsim.quality.QualityInfo;
 
 public class QualityInfoTest {
 

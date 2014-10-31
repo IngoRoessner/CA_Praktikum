@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.tests;
+package uni.ca.crawlingsim.tests;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import unileipzig.ca.praktikum.crawlingsim.webgraph.WebGraph;
+import uni.ca.crawlingsim.webgraph.WebGraph;
 
 public class WebGrapTest {
 
@@ -47,6 +47,9 @@ public class WebGrapTest {
 		assertTrue(fromD.containsAll(Arrays.asList(
 				"http://example.com/e"
 		)));
+		
+		List<String> fromE = graph.linksFrom("http://example.com/e");
+		assertTrue(fromE.size() == 0);
 	}
 
 

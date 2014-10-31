@@ -1,4 +1,4 @@
-package unileipzig.ca.praktikum.crawlingsim.tests;
+package uni.ca.crawlingsim.tests;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import unileipzig.ca.praktikum.crawlingsim.crawler.Crawler;
+import uni.ca.crawlingsim.crawler.Crawler;
 
 public class CrawlerTest {
 
