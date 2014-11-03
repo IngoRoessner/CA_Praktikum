@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class QualityInfo extends HashMap<String, Boolean> {
 	
@@ -21,6 +23,10 @@ public class QualityInfo extends HashMap<String, Boolean> {
 				}
 			}
 		});
+	}
+	
+	public Set<String> filterSet(Set<String> set, boolean quality){
+		return set.stream().filter(element -> this.get(element)==quality).collect(Collectors.toSet());
 	}
 
 }
