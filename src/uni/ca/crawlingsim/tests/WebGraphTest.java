@@ -14,7 +14,7 @@ import uni.ca.crawlingsim.webgraph.WebGraph;
 public class WebGraphTest {
 
 	@Test
-	public void constructBySmalFile() throws IOException {
+	public void constructBySmallFile() throws IOException {
 		String workingDirectory = System.getProperty("user.dir");
 		String location = "/test_resources/webgraph_smal.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
