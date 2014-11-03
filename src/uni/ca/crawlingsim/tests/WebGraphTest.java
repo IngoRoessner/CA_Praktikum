@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import uni.ca.crawlingsim.webgraph.WebGraph;
 
-public class WebGrapTest {
+public class WebGraphTest {
 
 	@Test
 	public void constructBySmalFile() throws IOException {

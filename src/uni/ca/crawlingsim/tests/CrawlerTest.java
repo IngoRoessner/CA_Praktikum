@@ -21,7 +21,7 @@ public class CrawlerTest {
 	}
 
 	@Test
-	public void smalFile() throws IOException {
+	public void smallFile() throws IOException {
 		String workingDirectory = System.getProperty("user.dir");
 		String location;
 		
