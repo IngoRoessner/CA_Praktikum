@@ -1,11 +1,14 @@
 package uni.ca.crawlingsim.crawler;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import uni.ca.crawlingsim.quality.QualityInfo;
 import uni.ca.crawlingsim.webgraph.WebGraph;
@@ -15,7 +18,18 @@ public class Crawler {
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
+		if(args.length!=5) System.out.println("Seed, Graph, Qualitätsmapping, Crawlingschritte, Qualityausgabe");
+		else{
+			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
+			Path graphFilePath = Paths.get(args[1]);
+			Path qualityFilePath = Paths.get(args[2]);
+			int takesPerStep = Integer.parseInt(args[3]);
+			Path stepQualityOutPath = Paths.get(args[4]);
+			Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
+			crawler.run(seed, takesPerStep);
+		}
+		
 		
 	}
 	
