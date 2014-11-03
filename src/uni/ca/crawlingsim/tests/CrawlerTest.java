@@ -27,7 +27,7 @@ public class CrawlerTest {
 		
 		Path graphFilePath = Paths.get(workingDirectory, "/test_resources/webgraph_smal.txt");
 		Path qualityFilePath = Paths.get(workingDirectory, "/test_resources/quality_smal.txt");
-		Path stepQualityOutPath = Paths.get(workingDirectory, "");
+		Path stepQualityOutPath = Paths.get(workingDirectory, "/test_resources/quality_small_out.txt");
 		
 		Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
 

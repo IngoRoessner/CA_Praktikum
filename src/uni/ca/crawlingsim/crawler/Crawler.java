@@ -37,7 +37,7 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 	}
 	
-	public void run(List<String> seed, int takesPerStep){
+	public void run(List<String> seed, int takesPerStep) throws IOException{
 		this.stepQualityOut.open();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
 		Set<String> done = new HashSet<String>();
