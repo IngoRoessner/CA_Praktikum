@@ -29,7 +29,7 @@ public class StepQualityOut {
 	public void printStepQuality(Set<String> done) throws IOException {
 		double goodCrawl = this.quality.filterSet(done, true).size();
 		double totalCrawl = done.size();
-		writer.write(Double.toString(goodCrawl / totalCrawl) + "\n");
+		writer.write(Double.toString(goodCrawl / totalCrawl) + System.lineSeparator());
 	}
 
 }
