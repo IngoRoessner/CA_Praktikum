@@ -19,7 +19,7 @@ public class Crawler {
 	private StepQualityOut stepQualityOut;
 	
 	public static void main(String[] args) throws IOException{
-		if(args.length != 5 || (args.length == 1 && (args[0].equals("--help") || args[0].equals("-h")))){
+		if(args.length != 5){
 			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING K STEP_QUALITY");
 		}else{
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
