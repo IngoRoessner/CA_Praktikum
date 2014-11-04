@@ -19,8 +19,9 @@ public class Crawler {
 	private StepQualityOut stepQualityOut;
 	
 	public static void main(String[] args) throws IOException{
-		if(args.length!=5) System.out.println("Seed, Graph, Qualitätsmapping, Crawlingschritte, Qualityausgabe");
-		else{
+		if(args.length != 5 || (args.length == 1 && (args[0].equals("--help") || args[0].equals("-h")))){
+			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING K STEP_QUALITY");
+		}else{
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
 			Path graphFilePath = Paths.get(args[1]);
 			Path qualityFilePath = Paths.get(args[2]);
@@ -28,11 +29,8 @@ public class Crawler {
 			Path stepQualityOutPath = Paths.get(args[4]);
 			Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
 			crawler.run(seed, takesPerStep);
-		}
-		
-		
+		}		
 	}
-	
 	
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut){
 		this.init(webGraph, qualityInfo, stepQualityOut);
