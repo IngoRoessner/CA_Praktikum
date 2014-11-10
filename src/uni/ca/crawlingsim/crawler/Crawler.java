@@ -20,15 +20,16 @@ public class Crawler {
 	
 	public static void main(String[] args) throws IOException{
 		if(args.length != 5){
-			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING K STEP_QUALITY");
+			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
 		}else{
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
 			Path graphFilePath = Paths.get(args[1]);
 			Path qualityFilePath = Paths.get(args[2]);
-			int takesPerStep = Integer.parseInt(args[3]);
-			Path stepQualityOutPath = Paths.get(args[4]);
+			int maxSteps = Integer.parseInt(args[3]);
+			int takesPerStep = Integer.parseInt(args[4]);
+			Path stepQualityOutPath = Paths.get(args[5]);
 			Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
-			crawler.run(seed, takesPerStep);
+			crawler.run(seed, takesPerStep, maxSteps);
 		}		
 	}
 	
@@ -49,12 +50,17 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 	}
 	
-	public void run(List<String> seed, int takesPerStep) throws IOException{
+	public void run(List<String> seed, int takesPerStep)throws IOException{
+		this.run(seed, takesPerStep, -1);
+	}
+	
+	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException{
 		this.stepQualityOut.open();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
 		Set<String> done = new HashSet<String>();
-		while(!urlQueue.isEmpty()){
-			for(int i = 0; i<takesPerStep && !urlQueue.isEmpty(); i++){
+		//if maxSteps = -1: run until  urlQueue.isEmpty()
+		for(int i = 0; i != maxSteps && !urlQueue.isEmpty(); i++){
+			for(int j = 0; j<takesPerStep && !urlQueue.isEmpty(); j++){
 				//no direct add to urlQueue as preparation for additional strategies
 				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
 				String url = urlQueue.poll();
