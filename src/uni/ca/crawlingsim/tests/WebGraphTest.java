@@ -16,7 +16,7 @@ public class WebGraphTest {
 	@Test
 	public void constructBySmallFile() throws IOException {
 		String workingDirectory = System.getProperty("user.dir");
-		String location = "/test_resources/webgraph_smal.txt";
+		String location = "/test_resources/webgraph_small.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
 		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
 		
