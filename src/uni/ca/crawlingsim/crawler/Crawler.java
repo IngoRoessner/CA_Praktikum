@@ -19,7 +19,7 @@ public class Crawler {
 	private StepQualityOut stepQualityOut;
 	
 	public static void main(String[] args) throws IOException{
-		if(args.length != 5){
+		if(args.length != 6){
 			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
 		}else{
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
