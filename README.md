@@ -32,3 +32,22 @@ runs exactly one step with two downloads (if possible), the output file will hav
 java -jar .\crawlingsim.jar ..\test_resources\seed_1.txt ..\test_resources\webgraph.txt ..\test_resources\quality.txt 2 2 ..\test_resources\out.txt
 
 runs two steps (if possible) with two downloads (if possible) for each step, the output file will have two line
+
+##Project Structure
+
+###Tests
+Resources: ./test_resources
+UnitTests: uni.ca.crawlingsim.tests
+
+###Classes
+uni.ca.crawlingsim.webgraph.WebGraph.java :
+parses and contains web graph structure
+
+uni.ca.crawlingsim.quality.QualityInfo.java :
+parses and contains quality informations
+
+uni.ca.crawlingsim.crawler.Crawler.java :
+creates WebGraph and QualityInfo, crawls and prints results through StepQualityOut
+
+uni.ca.crawlingsim.crawler.StepQualityOut.java
+prints the results into file
