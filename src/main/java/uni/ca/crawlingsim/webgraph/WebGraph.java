@@ -13,6 +13,7 @@ public class WebGraph {
 	
 	public WebGraph(Path graphFilePath) throws IOException {
 		this.edges = new HashMap<String, List<String>>();
+		//parse file and adds entrys to the edges map
 		Files.lines(graphFilePath).forEach(line -> {
 			String[] pair = line.split("\t");
 			if(pair.length != 2){

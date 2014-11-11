@@ -11,6 +11,7 @@ public class QualityInfo extends HashMap<String, Boolean> {
 	
 	public QualityInfo(Path qualityFilePath) throws IOException {
 		super();
+		//parse file and add entrys to map
 		Files.lines(qualityFilePath).forEach(line -> {
 			String[] pair = line.split("\t");
 			if(pair.length != 2 || !(pair[1].equals("1") || pair[1].equals("0"))){
@@ -25,6 +26,7 @@ public class QualityInfo extends HashMap<String, Boolean> {
 		});
 	}
 	
+	//filters given url set: returns a set where the given quality maches the quality mapping
 	public Set<String> filterSet(Set<String> set, boolean quality){
 		return set.stream().filter(element -> this.get(element)==quality).collect(Collectors.toSet());
 	}
