@@ -4,21 +4,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import uni.ca.crawlingsim.quality.QualityInfo;
-import uni.ca.crawlingsim.webgraph.WebGraph;
+import uni.ca.crawlingsim.data.Data;
+import uni.ca.crawlingsim.data.quality.QualityInfo;
+import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
 public class Crawler {
 	private WebGraph webGraph;
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
+	private Data data; //abstract of derby (embedded DB)
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception{
 		if(args.length != 6){
 			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
 		}else{
@@ -30,16 +33,19 @@ public class Crawler {
 			Path stepQualityOutPath = Paths.get(args[5]);
 			Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
 			crawler.run(seed, takesPerStep, maxSteps);
+			crawler.close();
 		}		
 	}
 	
+
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut){
 		this.init(webGraph, qualityInfo, stepQualityOut);
 	}
 	
-	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws IOException{
+	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws Exception{
+		Data data = new Data();
 		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
-		WebGraph graph = new WebGraph(graphFilePath);
+		WebGraph graph = new WebGraph(data, graphFilePath);
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath, qinfo);
 		this.init(graph, qinfo, out);
 	}
@@ -50,11 +56,11 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 	}
 	
-	public void run(List<String> seed, int takesPerStep)throws IOException{
+	public void run(List<String> seed, int takesPerStep)throws IOException, SQLException{
 		this.run(seed, takesPerStep, -1);
 	}
 	
-	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException{
+	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException{
 		this.stepQualityOut.open();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
 		Set<String> done = new HashSet<String>();
@@ -77,5 +83,9 @@ public class Crawler {
 
 	private void addUrlTakesToQueue(PriorityQueue<String> urlQueue, PriorityQueue<String> urlTakes) {
 		urlQueue.addAll(urlTakes);
+	}
+	
+	public void close() throws SQLException {
+		this.data.close();
 	}
 }

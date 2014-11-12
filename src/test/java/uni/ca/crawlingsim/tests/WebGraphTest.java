@@ -4,21 +4,23 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
-import uni.ca.crawlingsim.webgraph.WebGraph;
+import uni.ca.crawlingsim.data.Data;
+import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
 public class WebGraphTest {
 
 	@Test
-	public void constructBySmallFile() throws IOException {
+	public void constructBySmallFile() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, Exception {
 		String workingDirectory = System.getProperty("user.dir");
 		String location = "/test_resources/webgraph_small.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
-		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
+		WebGraph graph = new WebGraph(new Data(), Paths.get(workingDirectory, location));
 		
 		List<String> fromA = graph.linksFrom("http://example.com/a");
 		assertTrue(fromA.size() == 3);

@@ -1,4 +1,4 @@
-package uni.ca.crawlingsim.quality;
+package uni.ca.crawlingsim.data.quality;
 
 import java.io.IOException;
 import java.nio.file.Files;

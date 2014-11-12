@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,13 +16,13 @@ import uni.ca.crawlingsim.crawler.Crawler;
 
 public class CrawlerTest {
 
-	private void test(Crawler crawler, Path path, int i) throws IOException {
+	private void test(Crawler crawler, Path path, int i) throws IOException, SQLException {
 		List<String> seed = Files.lines(path).collect(Collectors.toList());
 		crawler.run(seed, i);
 	}
 
 	@Test
-	public void smallFile() throws IOException {
+	public void smallFile() throws Exception {
 		String workingDirectory = System.getProperty("user.dir");
 		String location;
 		

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
-import uni.ca.crawlingsim.quality.QualityInfo;
+import uni.ca.crawlingsim.data.quality.QualityInfo;
 
 public class QualityInfoTest {
 

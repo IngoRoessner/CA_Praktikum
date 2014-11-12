@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
-import uni.ca.crawlingsim.quality.QualityInfo;
+import uni.ca.crawlingsim.data.quality.QualityInfo;
 
 public class StepQualityOut {
 	private FileWriter writer;
