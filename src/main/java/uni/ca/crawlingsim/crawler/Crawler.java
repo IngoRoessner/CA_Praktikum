@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import uni.ca.crawlingsim.data.Data;
@@ -42,8 +45,11 @@ public class Crawler {
 	}
 	
 	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws Exception{
-		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
-		WebGraph graph = new WebGraph(graphFilePath);
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		Future<QualityInfo> future_quality = executorService.submit(()-> new QualityInfo(qualityFilePath));
+		Future<WebGraph> future_graph = executorService.submit(()-> new WebGraph(graphFilePath));
+		QualityInfo qinfo = future_quality.get();	
+		WebGraph graph = future_graph.get();
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath, qinfo);
 		this.init(graph, qinfo, out);
 	}
