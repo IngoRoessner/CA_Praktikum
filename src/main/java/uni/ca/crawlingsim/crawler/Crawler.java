@@ -53,7 +53,7 @@ public class Crawler {
 		Future<WebGraph> future_graph = executorService.submit(()-> new WebGraph(graphFilePath));
 		QualityInfo qinfo = future_quality.get();	
 		WebGraph graph = future_graph.get();
-		StepQualityOut out = new StepQualityOut(stepQualityOutPath, qinfo);
+		StepQualityOut out = new StepQualityOut(stepQualityOutPath);
 		this.init(graph, qinfo, out);
 	}
 	
@@ -78,12 +78,13 @@ public class Crawler {
 				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
 				String url = urlQueue.poll();
 				done.add(url);
+				this.stepQualityOut.count(quality.get(url));
 				webGraph.linksFrom(url).stream()
 					.filter(urlElement -> !done.contains(urlElement))
 					.forEach(urlElement -> urlTakes.add(urlElement));						
 				this.addUrlTakesToQueue(urlQueue, urlTakes);
 			}
-			this.stepQualityOut.printStepQuality(done);
+			this.stepQualityOut.printStepQuality();
 		}
 		this.stepQualityOut.close();
 	}

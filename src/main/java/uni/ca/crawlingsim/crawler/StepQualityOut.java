@@ -4,18 +4,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.Set;
-
-import uni.ca.crawlingsim.data.quality.QualityInfo;
 
 public class StepQualityOut {
 	private FileWriter writer;
-	private QualityInfo quality;
 	private Path stepQualityOutPath;
-
-	public StepQualityOut(Path stepQualityOutPath, QualityInfo quality) {
-		this.quality = quality;
+	private double goodQualityCount;
+	private double totalCount;
+	
+	public StepQualityOut(Path stepQualityOutPath) {
+		this.goodQualityCount = 0;
+		this.totalCount = 0;
 		this.stepQualityOutPath = stepQualityOutPath;
+	}
+	
+	public void count(boolean good){
+		if(good){
+			this.goodQualityCount++;			
+		}
+		this.totalCount++;
 	}
 
 	public void open() throws IOException {
@@ -26,10 +32,9 @@ public class StepQualityOut {
 		writer.close();
 	}
 
-	public void printStepQuality(Set<String> done) throws IOException, SQLException {
-		double goodCrawl = this.quality.filterSet(done, true).size();
-		double totalCrawl = done.size();
-		writer.write(Double.toString(goodCrawl / totalCrawl) + System.lineSeparator());
+	public void printStepQuality() throws IOException, SQLException {
+		double qualityresult = this.goodQualityCount / this.totalCount;
+		writer.write(Double.toString(qualityresult) + System.lineSeparator());
 	}
 
 }
