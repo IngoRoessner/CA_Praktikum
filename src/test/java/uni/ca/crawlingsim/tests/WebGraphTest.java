@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uni.ca.crawlingsim.data.Data;
@@ -54,5 +55,15 @@ public class WebGraphTest {
 		assertTrue(fromE.size() == 0);
 	}
 
-
+	@Ignore
+	@Test
+	public void prodFileRunable() throws Exception{
+		String workingDirectory = System.getProperty("user.dir");
+		String location = "/test_resources/prod_sample/linkgraph_ids.txt";
+		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
+		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
+		foo(graph);
+	}
+	
+	void foo(WebGraph graph){}
 }

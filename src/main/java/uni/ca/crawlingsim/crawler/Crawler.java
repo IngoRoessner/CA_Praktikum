@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -14,7 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import uni.ca.crawlingsim.data.Data;
 import uni.ca.crawlingsim.data.quality.QualityInfo;
 import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
@@ -33,8 +33,11 @@ public class Crawler {
 			int maxSteps = Integer.parseInt(args[3]);
 			int takesPerStep = Integer.parseInt(args[4]);
 			Path stepQualityOutPath = Paths.get(args[5]);
+			System.out.println(new Date().toString() + ": parse files...");
 			Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
+			System.out.println(new Date().toString() + ": crawl graph...");
 			crawler.run(seed, takesPerStep, maxSteps);
+			System.out.println(new Date().toString() + ": finished");
 			crawler.close();
 		}		
 	}

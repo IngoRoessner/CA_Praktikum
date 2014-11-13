@@ -1,17 +1,12 @@
 package uni.ca.crawlingsim.data.webgraph;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import uni.ca.crawlingsim.data.Data;
@@ -27,7 +22,7 @@ public class WebGraph {
 		Files.lines(graphFilePath).forEach( line -> {
 			String[] pair = line.split("\t");
 			if (pair.length != 2) {
-				System.err.println("wrong syntax, ignore line: \"" + line + "\"");
+				System.err.println("webgraph: wrong syntax, ignore line: \"" + line + "\"");
 			} else {
 				try {
 					this.addToTable(pair[0], pair[1]);

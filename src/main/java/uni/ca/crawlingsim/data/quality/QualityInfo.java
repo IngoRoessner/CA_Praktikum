@@ -1,15 +1,11 @@
 package uni.ca.crawlingsim.data.quality;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,9 +21,9 @@ public class QualityInfo{
 		this.createTable();
 		//parse file and add entrys to map
 		Files.lines(qualityFilePath).forEach(line -> {
-			String[] pair = line.split("\t");
+			String[] pair = line.split(" ");
 			if(pair.length != 2 || !(pair[1].equals("1") || pair[1].equals("0"))){
-				System.err.println("wrong syntax, ignore line: \""+line+"\"");
+				System.err.println("quality: wrong syntax, ignore line: \""+line+"\"");
 			}else{
 				try {
 					if(pair[1].equals("1")){

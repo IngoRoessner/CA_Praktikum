@@ -1,5 +1,5 @@
-http://example.com/a	1
-http://example.com/b	0
-http://example.com/c	1
-http://example.com/d	0
-http://example.com/e	1
+http://example.com/a 1
+http://example.com/b 0
+http://example.com/c 1
+http://example.com/d 0
+http://example.com/e 1
