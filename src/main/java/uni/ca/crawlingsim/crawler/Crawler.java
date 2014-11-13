@@ -19,7 +19,6 @@ public class Crawler {
 	private WebGraph webGraph;
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
-	private Data data; //abstract of derby (embedded DB)
 	
 	public static void main(String[] args) throws Exception{
 		if(args.length != 6){
@@ -43,9 +42,8 @@ public class Crawler {
 	}
 	
 	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws Exception{
-		Data data = new Data();
 		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
-		WebGraph graph = new WebGraph(data, graphFilePath);
+		WebGraph graph = new WebGraph(graphFilePath);
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath, qinfo);
 		this.init(graph, qinfo, out);
 	}
@@ -86,6 +84,6 @@ public class Crawler {
 	}
 	
 	public void close() throws SQLException {
-		this.data.close();
+		this.webGraph.close();
 	}
 }

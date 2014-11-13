@@ -20,8 +20,8 @@ public class WebGraph {
 	private Data data;
 	private static String tableName = "WebGraph";
 
-	public WebGraph(Data data, Path graphFilePath) throws Exception {
-		this.data = data;
+	public WebGraph(Path graphFilePath) throws Exception {
+		this.data = new Data();
 		this.createTable();
 		// parse file and adds entrys to the edges map
 		Files.lines(graphFilePath).forEach( line -> {
@@ -69,6 +69,10 @@ public class WebGraph {
 		resultSet.close();
 		preparedStatement.close();
 		return result;
+	}
+	
+	public void close() throws SQLException {
+		this.data.close();
 	}
 
 }
