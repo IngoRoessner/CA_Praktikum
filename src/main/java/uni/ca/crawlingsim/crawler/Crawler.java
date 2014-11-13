@@ -85,5 +85,6 @@ public class Crawler {
 	
 	public void close() throws SQLException {
 		this.webGraph.close();
+		this.quality.close();
 	}
 }

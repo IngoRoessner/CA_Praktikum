@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ import uni.ca.crawlingsim.data.quality.QualityInfo;
 public class QualityInfoTest {
 
 	@Test
-	public void constructBySmalFile() throws IOException {
+	public void constructBySmalFile() throws Exception {
 		String workingDirectory = System.getProperty("user.dir");
 		String location = "/test_resources/quality_small.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());

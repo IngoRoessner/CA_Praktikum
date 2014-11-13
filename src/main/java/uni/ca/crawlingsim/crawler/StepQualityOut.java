@@ -3,6 +3,7 @@ package uni.ca.crawlingsim.crawler;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.Set;
 
 import uni.ca.crawlingsim.data.quality.QualityInfo;
@@ -25,7 +26,7 @@ public class StepQualityOut {
 		writer.close();
 	}
 
-	public void printStepQuality(Set<String> done) throws IOException {
+	public void printStepQuality(Set<String> done) throws IOException, SQLException {
 		double goodCrawl = this.quality.filterSet(done, true).size();
 		double totalCrawl = done.size();
 		writer.write(Double.toString(goodCrawl / totalCrawl) + System.lineSeparator());
