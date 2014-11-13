@@ -63,14 +63,14 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 	}
 	
-	public void run(List<String> seed, int takesPerStep)throws IOException, SQLException{
+	public void run(List<String> seed, int takesPerStep)throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.run(seed, takesPerStep, -1);
 	}
 	
-	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException{
+	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.stepQualityOut.open();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
-		Set<String> done = new HashSet<String>();
+		DoneSet done = new DoneSet();
 		//if maxSteps = -1: run until  urlQueue.isEmpty()
 		for(int i = 0; i != maxSteps && !urlQueue.isEmpty(); i++){
 			for(int j = 0; j<takesPerStep && !urlQueue.isEmpty(); j++){
@@ -87,6 +87,7 @@ public class Crawler {
 			this.stepQualityOut.printStepQuality();
 		}
 		this.stepQualityOut.close();
+		done.close();
 	}
 
 	private void addUrlTakesToQueue(PriorityQueue<String> urlQueue, PriorityQueue<String> urlTakes) {
