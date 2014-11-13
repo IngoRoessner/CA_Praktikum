@@ -2,7 +2,6 @@ package uni.ca.crawlingsim.tests;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -11,7 +10,6 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uni.ca.crawlingsim.data.Data;
 import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
 public class WebGraphTest {
