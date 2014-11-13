@@ -71,16 +71,6 @@ public class QualityInfo{
 		return result;		
 	}
 	
-	//filters given url set: returns a set where the given quality maches the quality mapping
-	public Set<String> filterSet(Set<String> set, boolean quality) throws SQLException{
-		return set.stream().filter(element -> {
-			boolean result = false;
-			try{
-				result = this.get(element)==quality;
-			}catch(Exception e){}
-			return result;
-		}).collect(Collectors.toSet());
-	}
 
 	public void close() throws SQLException {
 		this.data.close();
