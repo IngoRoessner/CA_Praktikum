@@ -80,7 +80,13 @@ public class Crawler {
 				done.add(url);
 				this.stepQualityOut.count(quality.get(url));
 				webGraph.linksFrom(url).stream()
-					.filter(urlElement -> !done.contains(urlElement))
+					.filter(urlElement -> {
+						boolean result = false;
+						try{
+							result = !done.contains(urlElement);
+						}catch(Exception e){}
+						return result;
+					})
 					.forEach(urlElement -> urlTakes.add(urlElement));						
 				this.addUrlTakesToQueue(urlQueue, urlTakes);
 			}
