@@ -47,7 +47,7 @@ public class WebGraph {
 			statement.close();
 		}
 		Statement statement = data.createStatement();
-		statement.execute("create table "+tableName+" (from_url varchar(32) not null, to_url varchar(32))");
+		statement.execute("create table "+tableName+" (from_url varchar(64) not null, to_url varchar(64))");
 		statement.close();
 	}
 	

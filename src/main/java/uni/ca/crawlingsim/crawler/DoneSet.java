@@ -22,7 +22,7 @@ public class DoneSet {
 			statement.close();
 		}
 		Statement statement = data.createStatement();
-		statement.execute("create table "+tableName+" (url varchar(32))");
+		statement.execute("create table "+tableName+" (url varchar(64))");
 		statement.close();
 	}
 

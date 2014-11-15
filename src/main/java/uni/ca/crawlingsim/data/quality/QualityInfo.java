@@ -53,7 +53,7 @@ public class QualityInfo{
 			statement.close();
 		}
 		Statement statement = data.createStatement();
-		statement.execute("create table "+tableName+" (url varchar(32) not null, quality BOOLEAN)");
+		statement.execute("create table "+tableName+" (url varchar(64) not null, quality BOOLEAN)");
 		statement.close();
 	}
 	
