@@ -16,7 +16,6 @@ public class DoneSet {
 	}
 
 	private void createTable() throws SQLException {
-		// TODO Auto-generated method stub
 		if (data.containsTable(tableName)){
 			Statement statement = data.createStatement();
 			statement.execute("drop table "+tableName);
@@ -32,11 +31,9 @@ public class DoneSet {
 		preparedStatement.setString(1, url);
 		preparedStatement.execute();
 		preparedStatement.close();
-		// TODO Auto-generated method stub
 	}
 
 	public boolean contains(String url) throws SQLException {
-		// TODO Auto-generated method stub
 		PreparedStatement preparedStatement = data.prepareStatement("SELECT * FROM "+tableName+" WHERE url = ?");
 		preparedStatement.setString(1, url);
 		preparedStatement.execute();
