@@ -6,17 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import java.util.ArrayList;
+import java.util.List;
 import uni.ca.crawlingsim.data.Data;
 
 public class QualityInfo{
 	
 	private static String tableName = "QualityInfo";
 	Data data;
+	private List<String> insertBuffer;
 	
 	public QualityInfo(Path qualityFilePath) throws Exception {
+		this.insertBuffer = new ArrayList<String>();
 		this.data = new Data();
 		this.createTable();
 		//parse file and add entrys to map
@@ -36,6 +37,7 @@ public class QualityInfo{
 				}
 			}
 		});
+		this.flushInsertBuffer();
 	}
 	
 	private void createTable() throws Exception {
@@ -50,11 +52,14 @@ public class QualityInfo{
 	}
 	
 	private void addToTable(String url, boolean quality) throws SQLException{
-		PreparedStatement preparedStatement = data.prepareStatement("INSERT INTO "+tableName+" VALUES (?,?)");
-		preparedStatement.setString(1, url);
-		preparedStatement.setBoolean(2, quality);
-		preparedStatement.execute();
-		preparedStatement.close();
+		this.insertBuffer.add(new StringBuilder().append("('").append(url).append("',").append(quality ? "TRUE" : "FALSE").append(")").toString());
+		if(this.insertBuffer.size() == Data.insertBufferSize){
+			this.flushInsertBuffer();
+		}
+	}
+
+	private void flushInsertBuffer() throws SQLException {
+		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 	
 	public boolean get(String url) throws SQLException{

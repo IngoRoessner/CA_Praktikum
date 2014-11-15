@@ -14,8 +14,10 @@ import uni.ca.crawlingsim.data.Data;
 public class WebGraph {
 	private Data data;
 	private static String tableName = "WebGraph";
+	private List<String> insertBuffer;
 
 	public WebGraph(Path graphFilePath) throws Exception {
+		this.insertBuffer = new ArrayList<String>();
 		this.data = new Data();
 		this.createTable();
 		// parse file and adds entrys to the edges map
@@ -31,6 +33,7 @@ public class WebGraph {
 				}
 			}
 		});
+		this.flushInsertBuffer();
 	}
 
 	private void createTable() throws Exception {
@@ -45,11 +48,14 @@ public class WebGraph {
 	}
 	
 	private void addToTable(String from, String to) throws SQLException{
-		PreparedStatement preparedStatement = data.prepareStatement("INSERT INTO "+tableName+" VALUES (?,?)");
-		preparedStatement.setString(1, from);
-		preparedStatement.setString(2, to);
-		preparedStatement.execute();
-		preparedStatement.close();
+		this.insertBuffer.add(new StringBuilder().append("('").append(from).append("','").append(to).append("')").toString());
+		if(this.insertBuffer.size() == Data.insertBufferSize){
+			this.flushInsertBuffer();
+		}
+	}
+
+	private void flushInsertBuffer() throws SQLException {
+		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 
 	public List<String> linksFrom(String url) throws SQLException {

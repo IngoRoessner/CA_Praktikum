@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class Data {
+	public static int insertBufferSize = 100;
 	private static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static String database = "jdbc:derby:crawlingsim";
 	private static int openCount = 0;
@@ -52,5 +54,24 @@ public class Data {
 
 	public PreparedStatement prepareStatement(String string) throws SQLException {
 		return connection.prepareStatement(string);
+	}
+	
+	public void flushInsertBuffer(String tableName, List<String> insertBuffer) throws SQLException {
+		StringBuilder sb = new StringBuilder("INSERT INTO "+tableName+" VALUES ");
+		boolean firstLine = true;
+		for (String s : insertBuffer)
+		{
+			if(!firstLine){
+				sb.append(",");	
+			}else{				
+				firstLine = false;
+			}
+		    sb.append(s);
+		}
+		if(insertBuffer.size() > 0){
+			Statement statement = this.createStatement();
+			statement.execute(sb.toString());
+			insertBuffer.clear();
+		}
 	}
 }
