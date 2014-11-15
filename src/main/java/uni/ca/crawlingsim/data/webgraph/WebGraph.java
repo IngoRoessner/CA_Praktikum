@@ -20,17 +20,21 @@ public class WebGraph {
 		this.insertBuffer = new ArrayList<String>();
 		this.data = new Data();
 		this.createTable();
+		final long[] count = new long[] {0L};
 		// parse file and adds entrys to the edges map
 		Files.lines(graphFilePath).forEach( line -> {
+			count[0]++; 
+			if(count[0] % 100000 == 0){
+				System.out.println("WebGraph parsed: "+count[0]+" lines");
+			}
+			
 			String[] pair = line.split("\t");
 			if (pair.length != 2) {
 				System.err.println("webgraph: wrong syntax, ignore line: \"" + line + "\"");
 			} else {
 				try {
 					this.addToTable(pair[0], pair[1]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} catch (Exception e) {}
 			}
 		});
 		this.flushInsertBuffer();

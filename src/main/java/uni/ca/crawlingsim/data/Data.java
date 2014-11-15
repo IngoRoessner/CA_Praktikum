@@ -9,8 +9,16 @@ import java.sql.Statement;
 import java.util.List;
 
 public class Data {
-	public static int insertBufferSize = 100;
 	private static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+	static {
+		try {
+			Class.forName(driver).newInstance();
+		} catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public static int insertBufferSize = 999;
 	private static String database = "jdbc:derby:crawlingsim";
 	private static int openCount = 0;
 
@@ -18,7 +26,6 @@ public class Data {
 	
 	public Data() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		openCount++;
-		Class.forName(driver).newInstance();
 		this.connection = DriverManager.getConnection(database + ";create=true");
 	}
 	

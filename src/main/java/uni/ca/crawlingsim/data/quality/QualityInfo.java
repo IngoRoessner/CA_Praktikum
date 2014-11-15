@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 import uni.ca.crawlingsim.data.Data;
 
 public class QualityInfo{
@@ -20,8 +21,13 @@ public class QualityInfo{
 		this.insertBuffer = new ArrayList<String>();
 		this.data = new Data();
 		this.createTable();
+		final long[] count = new long[] {0L};
 		//parse file and add entrys to map
 		Files.lines(qualityFilePath).forEach(line -> {
+			count[0]++; 
+			if(count[0] % 100000 == 0){
+				System.out.println("QualityInfo parsed: "+count[0]+" lines");
+			}
 			String[] pair = line.split(" ");
 			if(pair.length != 2 || !(pair[1].equals("1") || pair[1].equals("0"))){
 				System.err.println("quality: wrong syntax, ignore line: \""+line+"\"");
