@@ -88,6 +88,9 @@ public class Crawler {
 			//no direct add to urlQueue as preparation for additional strategies
 			this.addUrlTakesToQueue(urlQueue, quality);
 			this.stepQualityOut.printStepQuality();
+			if(i<10 || i%100==0){
+				System.out.println("crawled steps: "+i);
+			}
 		}
 		this.stepQualityOut.close();
 		done.close();
