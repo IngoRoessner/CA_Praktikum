@@ -87,6 +87,8 @@ public class WebGraph {
 		{
 			if(!firstLine){
 				sb.append(", ");
+			}else{
+				firstLine = false;
 			}
 			sb.append("'"); 
 		    sb.append(s); 
