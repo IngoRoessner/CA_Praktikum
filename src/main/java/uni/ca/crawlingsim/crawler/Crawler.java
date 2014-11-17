@@ -5,17 +5,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import uni.ca.crawlingsim.data.quality.QualityInfo;
+import uni.ca.crawlingsim.data.quality.QualityInfo.QualityResultElement;
 import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
 public class Crawler {
@@ -73,31 +74,27 @@ public class Crawler {
 		DoneSet done = new DoneSet();
 		//if maxSteps = -1: run until  urlQueue.isEmpty()
 		for(int i = 0; i != maxSteps && !urlQueue.isEmpty(); i++){
+			List<String> tempDone = new ArrayList<String>();
+			List<String> urls = new ArrayList<String>();
 			for(int j = 0; j<takesPerStep && !urlQueue.isEmpty(); j++){
-				//no direct add to urlQueue as preparation for additional strategies
-				PriorityQueue<String> urlTakes = new PriorityQueue<String>();
 				String url = urlQueue.poll();
-				done.add(url);
-				this.stepQualityOut.count(quality.get(url));
-				webGraph.linksFrom(url).stream()
-					.filter(urlElement -> {
-						boolean result = false;
-						try{
-							result = !done.contains(urlElement);
-						}catch(Exception e){}
-						return result;
-					})
-					.forEach(urlElement -> urlTakes.add(urlElement));						
-				this.addUrlTakesToQueue(urlQueue, urlTakes);
+				urls.add(url);
+				tempDone.add(url);
 			}
+			done.add(tempDone);
+			List<String> links = webGraph.linksFrom(urls, done);
+			Map<String, QualityResultElement> quality = this.quality.get(links);
+								
+			//no direct add to urlQueue as preparation for additional strategies
+			this.addUrlTakesToQueue(urlQueue, quality);
 			this.stepQualityOut.printStepQuality();
 		}
 		this.stepQualityOut.close();
 		done.close();
 	}
 
-	private void addUrlTakesToQueue(PriorityQueue<String> urlQueue, PriorityQueue<String> urlTakes) {
-		urlQueue.addAll(urlTakes);
+	private void addUrlTakesToQueue(PriorityQueue<String> urlQueue, Map<String, QualityResultElement> urlTakes) {
+		urlQueue.addAll(urlTakes.values().stream().map(element -> element.url).collect(Collectors.toList()));
 	}
 	
 	public void close() throws SQLException {

@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import uni.ca.crawlingsim.crawler.DoneSet;
 import uni.ca.crawlingsim.data.webgraph.WebGraph;
 
 public class WebGraphTest {
@@ -20,8 +21,8 @@ public class WebGraphTest {
 		String location = "/test_resources/webgraph_small.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
 		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
-		
-		List<String> fromA = graph.linksFrom("http://example.com/a");
+		DoneSet done = new DoneSet();
+		List<String> fromA = graph.linksFrom("http://example.com/a", done);
 		assertTrue(fromA.size() == 3);
 		assertTrue(fromA.containsAll(Arrays.asList(
 				"http://example.com/a", 
@@ -29,27 +30,27 @@ public class WebGraphTest {
 				"http://example.com/e"
 		))); 
 
-		List<String> fromB = graph.linksFrom("http://example.com/b");
+		List<String> fromB = graph.linksFrom("http://example.com/b", done);
 		assertTrue(fromB.size() == 2);
 		assertTrue(fromB.containsAll(Arrays.asList(
 				"http://example.com/a", 
 				"http://example.com/c" 
 		))); 
 
-		List<String> fromC = graph.linksFrom("http://example.com/c");
+		List<String> fromC = graph.linksFrom("http://example.com/c", done);
 		assertTrue(fromC.size() == 2);
 		assertTrue(fromC.containsAll(Arrays.asList(
 				"http://example.com/a", 
 				"http://example.com/d" 
 		)));
 		
-		List<String> fromD = graph.linksFrom("http://example.com/d");
+		List<String> fromD = graph.linksFrom("http://example.com/d", done);
 		assertTrue(fromD.size() == 1);
 		assertTrue(fromD.containsAll(Arrays.asList(
 				"http://example.com/e"
 		)));
 		
-		List<String> fromE = graph.linksFrom("http://example.com/e");
+		List<String> fromE = graph.linksFrom("http://example.com/e", done);
 		assertTrue(fromE.size() == 0);
 	}
 

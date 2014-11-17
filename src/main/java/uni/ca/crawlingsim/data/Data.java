@@ -19,7 +19,7 @@ public class Data {
 		}
 	}
 	public static int insertBufferSize = 999;
-	private static String database = "jdbc:derby:crawlingsim";
+	private static String database = "jdbc:derby:crawlingsimDB";
 	private static int openCount = 0;
 
 	private Connection connection;
@@ -27,9 +27,11 @@ public class Data {
 	public Data() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		openCount++;
 		this.connection = DriverManager.getConnection(database + ";create=true");
+		this.connection.setAutoCommit(false);
 	}
 	
 	public void close() throws SQLException{
+		this.commit();
 		connection.close();
 		openCount--;
 		if(openCount==0){
@@ -80,5 +82,9 @@ public class Data {
 			statement.execute(sb.toString());
 			insertBuffer.clear();
 		}
+	}
+	
+	public void commit() throws SQLException{
+		this.connection.commit();
 	}
 }

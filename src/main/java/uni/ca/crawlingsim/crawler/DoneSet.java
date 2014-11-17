@@ -4,12 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 import uni.ca.crawlingsim.data.Data;
 
 public class DoneSet {
 	private Data data;
-	private static String tableName = "DoneSetTable";
+	public static String tableName = "DoneSetTable";
 	public DoneSet() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
 		this.data = new Data();
 		this.createTable();
@@ -24,13 +26,31 @@ public class DoneSet {
 		Statement statement = data.createStatement();
 		statement.execute("create table "+tableName+" (url varchar(64))");
 		statement.close();
+		data.commit();
 	}
 
 	public void add(String url) throws SQLException {
-		PreparedStatement preparedStatement = data.prepareStatement("INSERT INTO "+tableName+" VALUES (?)");
-		preparedStatement.setString(1, url);
-		preparedStatement.execute();
-		preparedStatement.close();
+		this.add(Arrays.asList(url));
+	}
+	
+	public void add(List<String> urls) throws SQLException {
+		StringBuilder sb = new StringBuilder("");
+		boolean firstLine = true;
+		for (String s : urls)
+		{
+			if(!firstLine){
+				sb.append(", ");
+			}else{
+				firstLine = false;
+			}
+			sb.append("('"); 
+		    sb.append(s); 
+		    sb.append("')"); 
+		}
+		Statement statement = data.createStatement();
+		statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
+		statement.close();
+		data.commit();
 	}
 
 	public boolean contains(String url) throws SQLException {

@@ -7,13 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uni.ca.crawlingsim.data.Data;
 
 public class QualityInfo{
 	
-	private static String tableName = "QualityInfo";
+	public static String tableName = "QualityInfo";
 	Data data;
 	private List<String> insertBuffer;
 	
@@ -27,6 +29,13 @@ public class QualityInfo{
 			count[0]++; 
 			if(count[0] % 100000 == 0){
 				System.out.println("QualityInfo parsed: "+count[0]+" lines");
+			}
+			if(count[0] % 5000000 == 0){
+				try {
+					data.commit();
+				} catch (Exception e) {
+					System.err.println("Error on Commit");
+				}
 			}
 			String[] pair = line.split(" ");
 			if(pair.length != 2 || !(pair[1].equals("1") || pair[1].equals("0"))){
@@ -44,6 +53,7 @@ public class QualityInfo{
 			}
 		});
 		this.flushInsertBuffer();
+		data.commit();
 	}
 	
 	private void createTable() throws Exception {
@@ -82,6 +92,56 @@ public class QualityInfo{
 		return result;		
 	}
 	
+	public class QualityResultElement{
+		public boolean quality;
+		public String url;
+	}
+	
+	public Map<String, QualityResultElement> get(List<String> urls) throws SQLException{
+		Map<String, QualityResultElement> result = new HashMap<String, QualityResultElement>();
+		if(urls.size()==0){
+			return result;
+		}
+		StringBuilder sb = new StringBuilder("");
+		boolean firstLine = true;
+		for (String s : urls)
+		{
+			if(!firstLine){
+				sb.append(", ");
+			}else{
+				firstLine = false;
+			}
+			sb.append("'"); 
+		    sb.append(s); 
+		    sb.append("'"); 
+		}
+		
+		Statement statement = data.createStatement();
+		ResultSet resultSet = statement.executeQuery("SELECT url, quality FROM "+tableName+" WHERE url IN ("+sb.toString()+")");
+		while (resultSet.next()) {
+			QualityResultElement element = new QualityResultElement();
+			element.quality = resultSet.getBoolean("quality");
+			element.url = resultSet.getString("url");
+			result.put(element.url, element);
+		}
+		resultSet.close();
+		statement.close();
+		return this.complete(result, urls);		
+	}
+	
+	private Map<String, QualityResultElement> complete(Map<String, QualityResultElement> quality, List<String> urls){
+		if(quality.size() != urls.size()){
+			urls.forEach(url -> {
+				if(!quality.containsKey(url)){
+					QualityResultElement element = new QualityResultElement();
+					element.quality = false;
+					element.url = url;
+					quality.put(element.url, element);
+				}
+			});
+		}
+		return quality;
+	}
 
 	public void close() throws SQLException {
 		this.data.close();

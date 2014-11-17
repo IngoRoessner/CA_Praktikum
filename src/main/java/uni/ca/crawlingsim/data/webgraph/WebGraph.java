@@ -9,11 +9,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import uni.ca.crawlingsim.crawler.DoneSet;
 import uni.ca.crawlingsim.data.Data;
+import uni.ca.crawlingsim.data.quality.QualityInfo;
 
 public class WebGraph {
 	private Data data;
-	private static String tableName = "WebGraph";
+	public static String tableName = "WebGraph";
 	private List<String> insertBuffer;
 
 	public WebGraph(Path graphFilePath) throws Exception {
@@ -27,6 +29,13 @@ public class WebGraph {
 			if(count[0] % 100000 == 0){
 				System.out.println("WebGraph parsed: "+count[0]+" lines");
 			}
+			if(count[0] % 5000000 == 0){
+				try {
+					data.commit();
+				} catch (Exception e) {
+					System.err.println("Error on Commit");
+				}
+			}
 			
 			String[] pair = line.split("\t");
 			if (pair.length != 2) {
@@ -38,6 +47,7 @@ public class WebGraph {
 			}
 		});
 		this.flushInsertBuffer();
+		data.commit();
 	}
 
 	private void createTable() throws Exception {
@@ -61,18 +71,39 @@ public class WebGraph {
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
-
-	public List<String> linksFrom(String url) throws SQLException {
-		List<String> result = new ArrayList<String>();
-		PreparedStatement preparedStatement = data.prepareStatement("SELECT to_url FROM "+tableName+" WHERE from_url = ?");
-		preparedStatement.setString(1, url);
-		preparedStatement.execute();
-		ResultSet resultSet = preparedStatement.getResultSet();
+	
+	public List<String> linksFrom(String url, DoneSet done) throws SQLException {
+		List<String> urls = new ArrayList<String>();
+		urls.add(url);
+		return linksFrom(urls, done);
+	}
+	
+	//Param done, to be shure that a done table exists
+	public List<String> linksFrom(List<String> urls, DoneSet done) throws SQLException {
+		List<String> result = new ArrayList<String>();	
+		StringBuilder sb = new StringBuilder("");
+		boolean firstLine = true;
+		for (String s : urls)
+		{
+			if(!firstLine){
+				sb.append(", ");
+			}
+			sb.append("'"); 
+		    sb.append(s); 
+		    sb.append("'"); 
+		}
+		Statement statement = data.createStatement();
+		ResultSet resultSet = statement.executeQuery(
+				"SELECT to_url FROM "+tableName+
+				" WHERE from_url IN ("+
+				sb.toString()+
+				") AND to_url NOT IN (SELECT url FROM "+DoneSet.tableName+")"
+		);
 		while (resultSet.next()) {
-			result.add(resultSet.getString(1));
+			result.add(resultSet.getString("to_url"));
 		}
 		resultSet.close();
-		preparedStatement.close();
+		statement.close();
 		return result;
 	}
 	
