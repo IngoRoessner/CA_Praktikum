@@ -82,15 +82,17 @@ public class Crawler {
 				tempDone.add(url);
 			}
 			done.add(tempDone);
-			List<String> links = webGraph.linksFrom(urls, done);
+			System.out.println(new Date().toString() + ": getting linkls...");
+			List<String> links = webGraph.linksFrom(urls);
+			System.out.println(new Date().toString() + ": filter linkls by done...");
+			links = done.filter(links);
+			System.out.println(new Date().toString() + ": getting quality...");
 			Map<String, QualityResultElement> quality = this.quality.get(links);
 								
 			//no direct add to urlQueue as preparation for additional strategies
 			this.addUrlTakesToQueue(urlQueue, quality);
 			this.stepQualityOut.printStepQuality();
-			if(i<10 || i%100==0){
-				System.out.println("crawled steps: "+i);
-			}
+			System.out.println(new Date().toString() + ": crawled steps: "+i);
 		}
 		this.stepQualityOut.close();
 		done.close();

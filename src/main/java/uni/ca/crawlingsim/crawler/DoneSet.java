@@ -5,9 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import uni.ca.crawlingsim.data.Data;
+import uni.ca.crawlingsim.data.quality.QualityInfo.QualityResultElement;
 
 public class DoneSet {
 	private Data data;
@@ -66,6 +69,34 @@ public class DoneSet {
 
 	public void close() throws SQLException {
 		this.data.close();
+	}
+
+	public List<String> filter(List<String> links) throws SQLException {
+		if(links.size() == 0){
+			return links;
+		}
+		StringBuilder sb = new StringBuilder("");
+		boolean firstLine = true;
+		for (String s : links)
+		{
+			if(!firstLine){
+				sb.append(", ");
+			}else{
+				firstLine = false;
+			}
+			sb.append("'"); 
+		    sb.append(s); 
+		    sb.append("'"); 
+		}
+		HashSet<String> filter = new HashSet<String>();
+		Statement statement = data.createStatement();
+		ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE url IN ("+sb.toString()+")");
+		while (resultSet.next()) {
+			filter.add(resultSet.getString("url"));
+		}
+		resultSet.close();
+		statement.close();
+		return links.stream().filter(link -> !filter.contains(link)).collect(Collectors.toList());
 	}
 	
 	

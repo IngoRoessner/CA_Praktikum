@@ -20,7 +20,7 @@ public class CrawlerTest {
 	private void test(Path path, int i) throws Exception {
 		Path graphFilePath = Paths.get(workingDirectory, "/test_resources/webgraph_small.txt");
 		Path qualityFilePath = Paths.get(workingDirectory, "/test_resources/quality_small.txt");
-		Path stepQualityOutPath = Paths.get(workingDirectory, "/test_resources/quality_small_out.txt");
+		Path stepQualityOutPath = Paths.get(workingDirectory, "/test_resources/quality_small_out_2.txt");
 		
 		Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
 		

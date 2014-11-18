@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import uni.ca.crawlingsim.crawler.DoneSet;
@@ -48,6 +49,15 @@ public class WebGraph {
 		});
 		this.flushInsertBuffer();
 		data.commit();
+		this.createIndex();
+		data.commit();
+	}
+
+	private void createIndex() throws SQLException {
+		System.out.println(new Date().toString()+": create WebGraph index...");
+		Statement statement = data.createStatement();
+		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(from_url)");
+		statement.close();
 	}
 
 	private void createTable() throws Exception {
@@ -59,6 +69,7 @@ public class WebGraph {
 		Statement statement = data.createStatement();
 		statement.execute("create table "+tableName+" (from_url varchar(64) not null, to_url varchar(64))");
 		statement.close();
+		this.data.commit();
 	}
 	
 	private void addToTable(String from, String to) throws SQLException{
@@ -72,14 +83,13 @@ public class WebGraph {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 	
-	public List<String> linksFrom(String url, DoneSet done) throws SQLException {
+	public List<String> linksFrom(String url) throws SQLException {
 		List<String> urls = new ArrayList<String>();
 		urls.add(url);
-		return linksFrom(urls, done);
+		return linksFrom(urls);
 	}
 	
-	//Param done, to be shure that a done table exists
-	public List<String> linksFrom(List<String> urls, DoneSet done) throws SQLException {
+	public List<String> linksFrom(List<String> urls) throws SQLException {
 		List<String> result = new ArrayList<String>();	
 		StringBuilder sb = new StringBuilder("");
 		boolean firstLine = true;
@@ -97,9 +107,7 @@ public class WebGraph {
 		Statement statement = data.createStatement();
 		ResultSet resultSet = statement.executeQuery(
 				"SELECT to_url FROM "+tableName+
-				" WHERE from_url IN ("+
-				sb.toString()+
-				") AND to_url NOT IN (SELECT url FROM "+DoneSet.tableName+")"
+				" WHERE from_url IN ("+sb.toString()+")"
 		);
 		while (resultSet.next()) {
 			result.add(resultSet.getString("to_url"));

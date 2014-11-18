@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,9 @@ public class QualityInfo{
 			statement.close();
 		}
 		Statement statement = data.createStatement();
-		statement.execute("create table "+tableName+" (url varchar(64) not null, quality BOOLEAN)");
+		statement.execute("create table "+tableName+" (url varchar(64) not null, quality BOOLEAN, PRIMARY KEY (url))");
 		statement.close();
+		this.data.commit();
 	}
 	
 	private void addToTable(String url, boolean quality) throws SQLException{

@@ -22,7 +22,7 @@ public class WebGraphTest {
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
 		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
 		DoneSet done = new DoneSet();
-		List<String> fromA = graph.linksFrom("http://example.com/a", done);
+		List<String> fromA = graph.linksFrom("http://example.com/a");
 		assertTrue(fromA.size() == 3);
 		assertTrue(fromA.containsAll(Arrays.asList(
 				"http://example.com/a", 
@@ -30,27 +30,27 @@ public class WebGraphTest {
 				"http://example.com/e"
 		))); 
 
-		List<String> fromB = graph.linksFrom("http://example.com/b", done);
+		List<String> fromB = graph.linksFrom("http://example.com/b");
 		assertTrue(fromB.size() == 2);
 		assertTrue(fromB.containsAll(Arrays.asList(
 				"http://example.com/a", 
 				"http://example.com/c" 
 		))); 
 
-		List<String> fromC = graph.linksFrom("http://example.com/c", done);
+		List<String> fromC = graph.linksFrom("http://example.com/c");
 		assertTrue(fromC.size() == 2);
 		assertTrue(fromC.containsAll(Arrays.asList(
 				"http://example.com/a", 
 				"http://example.com/d" 
 		)));
 		
-		List<String> fromD = graph.linksFrom("http://example.com/d", done);
+		List<String> fromD = graph.linksFrom("http://example.com/d");
 		assertTrue(fromD.size() == 1);
 		assertTrue(fromD.containsAll(Arrays.asList(
 				"http://example.com/e"
 		)));
 		
-		List<String> fromE = graph.linksFrom("http://example.com/e", done);
+		List<String> fromE = graph.linksFrom("http://example.com/e");
 		assertTrue(fromE.size() == 0);
 	}
 
