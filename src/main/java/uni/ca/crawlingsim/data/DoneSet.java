@@ -34,23 +34,25 @@ public class DoneSet {
 	}
 	
 	public void add(List<String> urls) throws SQLException {
-		StringBuilder sb = new StringBuilder("");
-		boolean firstLine = true;
-		for (String s : urls)
-		{
-			if(!firstLine){
-				sb.append(", ");
-			}else{
-				firstLine = false;
+		if(urls.size() > 0){
+			StringBuilder sb = new StringBuilder("");
+			boolean firstLine = true;
+			for (String s : urls)
+			{
+				if(!firstLine){
+					sb.append(", ");
+				}else{
+					firstLine = false;
+				}
+				sb.append("('"); 
+			    sb.append(s); 
+			    sb.append("')"); 
 			}
-			sb.append("('"); 
-		    sb.append(s); 
-		    sb.append("')"); 
+			Statement statement = data.createStatement();
+			statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
+			statement.close();
+			data.commit();
 		}
-		Statement statement = data.createStatement();
-		statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
-		statement.close();
-		data.commit();
 	}
 
 	public boolean contains(String url) throws SQLException {

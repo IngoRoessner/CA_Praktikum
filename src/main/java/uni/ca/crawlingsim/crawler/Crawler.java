@@ -72,21 +72,21 @@ public class Crawler {
 	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.stepQualityOut.open();
 		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
+		seed.forEach(s -> this.stepQualityOut.count(true));
 		DoneSet done = new DoneSet();
+		done.add(seed);
 		//if maxSteps = -1: run until  urlQueue.isEmpty()
 		for(int i = 0; i != maxSteps && !urlQueue.isEmpty(); i++){
-			List<String> tempDone = new ArrayList<String>();
 			List<String> urls = new ArrayList<String>();
 			for(int j = 0; j<takesPerStep && !urlQueue.isEmpty(); j++){
 				String url = urlQueue.poll();
 				urls.add(url);
-				tempDone.add(url);
 			}
-			done.add(tempDone);
 			//System.out.println(new Date().toString() + ": getting linkls...");
 			List<String> links = webGraph.linksFrom(urls);
 			//System.out.println(new Date().toString() + ": filter linkls by done...");
 			links = done.filter(links);
+			done.add(links);
 			//System.out.println(new Date().toString() + ": getting quality...");
 			Map<String, QualityResultElement> quality = this.quality.get(links);
 				
@@ -95,7 +95,9 @@ public class Crawler {
 			//no direct add to urlQueue as preparation for additional strategies
 			this.addUrlTakesToQueue(urlQueue, quality);
 			this.stepQualityOut.printStepQuality();
-			//System.out.println(new Date().toString() + ": crawled steps: "+i);
+			if(i%100 == 0){
+				System.out.println(new Date().toString() + ": crawled steps: "+i);
+			}
 		}
 		this.stepQualityOut.close();
 		done.close();
