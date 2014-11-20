@@ -4,6 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.Map;
+
+import uni.ca.crawlingsim.data.QualityInfo.QualityResultElement;
 
 public class StepQualityOut {
 	private FileWriter writer;
@@ -35,6 +38,12 @@ public class StepQualityOut {
 	public void printStepQuality() throws IOException, SQLException {
 		double qualityresult = this.goodQualityCount / this.totalCount;
 		writer.write(Double.toString(qualityresult) + System.lineSeparator());
+	}
+
+	public void count(Map<String, QualityResultElement> quality) {
+		quality.forEach((key, value)->{
+			this.count(value.quality);
+		});
 	}
 
 }

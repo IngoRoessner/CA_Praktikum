@@ -10,8 +10,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uni.ca.crawlingsim.crawler.DoneSet;
-import uni.ca.crawlingsim.data.webgraph.WebGraph;
+import uni.ca.crawlingsim.data.WebGraph;
 
 public class WebGraphTest {
 
@@ -21,7 +20,7 @@ public class WebGraphTest {
 		String location = "/test_resources/webgraph_small.txt";
 		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
 		WebGraph graph = new WebGraph(Paths.get(workingDirectory, location));
-		DoneSet done = new DoneSet();
+		
 		List<String> fromA = graph.linksFrom("http://example.com/a");
 		assertTrue(fromA.size() == 3);
 		assertTrue(fromA.containsAll(Arrays.asList(

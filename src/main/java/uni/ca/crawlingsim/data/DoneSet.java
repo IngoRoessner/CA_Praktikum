@@ -1,4 +1,4 @@
-package uni.ca.crawlingsim.crawler;
+package uni.ca.crawlingsim.data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,9 +8,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import uni.ca.crawlingsim.data.Data;
-import uni.ca.crawlingsim.data.quality.QualityInfo.QualityResultElement;
 
 public class DoneSet {
 	private Data data;

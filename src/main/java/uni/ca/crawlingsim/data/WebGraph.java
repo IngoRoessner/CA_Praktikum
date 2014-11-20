@@ -1,18 +1,13 @@
-package uni.ca.crawlingsim.data.webgraph;
+package uni.ca.crawlingsim.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import uni.ca.crawlingsim.crawler.DoneSet;
-import uni.ca.crawlingsim.data.Data;
-import uni.ca.crawlingsim.data.quality.QualityInfo;
 
 public class WebGraph {
 	private Data data;

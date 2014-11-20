@@ -15,9 +15,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import uni.ca.crawlingsim.data.quality.QualityInfo;
-import uni.ca.crawlingsim.data.quality.QualityInfo.QualityResultElement;
-import uni.ca.crawlingsim.data.webgraph.WebGraph;
+import uni.ca.crawlingsim.data.DoneSet;
+import uni.ca.crawlingsim.data.QualityInfo;
+import uni.ca.crawlingsim.data.WebGraph;
+import uni.ca.crawlingsim.data.QualityInfo.QualityResultElement;
 
 public class Crawler {
 	private WebGraph webGraph;
@@ -82,17 +83,19 @@ public class Crawler {
 				tempDone.add(url);
 			}
 			done.add(tempDone);
-			System.out.println(new Date().toString() + ": getting linkls...");
+			//System.out.println(new Date().toString() + ": getting linkls...");
 			List<String> links = webGraph.linksFrom(urls);
-			System.out.println(new Date().toString() + ": filter linkls by done...");
+			//System.out.println(new Date().toString() + ": filter linkls by done...");
 			links = done.filter(links);
-			System.out.println(new Date().toString() + ": getting quality...");
+			//System.out.println(new Date().toString() + ": getting quality...");
 			Map<String, QualityResultElement> quality = this.quality.get(links);
-								
+				
+			this.stepQualityOut.count(quality);
+			
 			//no direct add to urlQueue as preparation for additional strategies
 			this.addUrlTakesToQueue(urlQueue, quality);
 			this.stepQualityOut.printStepQuality();
-			System.out.println(new Date().toString() + ": crawled steps: "+i);
+			//System.out.println(new Date().toString() + ": crawled steps: "+i);
 		}
 		this.stepQualityOut.close();
 		done.close();

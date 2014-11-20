@@ -1,4 +1,4 @@
-package uni.ca.crawlingsim.data.quality;
+package uni.ca.crawlingsim.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import uni.ca.crawlingsim.data.Data;
 
 public class QualityInfo{
 	
@@ -55,8 +53,17 @@ public class QualityInfo{
 		});
 		this.flushInsertBuffer();
 		data.commit();
+		this.createIndex();
+		data.commit();
 	}
 	
+	private void createIndex() throws SQLException {
+		System.out.println(new Date().toString()+": create QualityInfo index...");
+		Statement statement = data.createStatement();
+		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(url)");
+		statement.close();
+	}
+
 	private void createTable() throws Exception {
 		if (data.containsTable(tableName)){
 			Statement statement = data.createStatement();
@@ -64,7 +71,7 @@ public class QualityInfo{
 			statement.close();
 		}
 		Statement statement = data.createStatement();
-		statement.execute("create table "+tableName+" (url varchar(64) not null, quality BOOLEAN, PRIMARY KEY (url))");
+		statement.execute("create table "+tableName+" (url varchar(64) not null, quality BOOLEAN)");
 		statement.close();
 		this.data.commit();
 	}

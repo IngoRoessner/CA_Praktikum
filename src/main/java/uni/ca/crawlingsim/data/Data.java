@@ -19,7 +19,7 @@ public class Data {
 		}
 	}
 	public static int insertBufferSize = 999;
-	private static String database = "jdbc:derby:crawlingsimDB";
+	private static String database = "jdbc:derby:crawlingsim_db";
 	private static int openCount = 0;
 
 	private Connection connection;

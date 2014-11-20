@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import uni.ca.crawlingsim.crawler.DoneSet;
+import uni.ca.crawlingsim.data.DoneSet;
 
 public class DoneSetTest {
 

@@ -3,10 +3,11 @@ package uni.ca.crawlingsim.tests;
 import static org.junit.Assert.*;
 
 import java.nio.file.Paths;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uni.ca.crawlingsim.data.quality.QualityInfo;
+import uni.ca.crawlingsim.data.QualityInfo;
 
 public class QualityInfoTest {
 
