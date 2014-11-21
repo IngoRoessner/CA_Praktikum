@@ -40,7 +40,7 @@ public class DoneSet {
 			for(int i = 0;i<(urls.size()/999); i++)
 			{
 				List<String> subUrls = urls.subList(i*1000, i*1000+999);
-				if(i*999>urls.size()) 
+				if(i*1000+999>urls.size()) 
 					subUrls = urls.subList(i*1000, urls.size());
 				for (String s : subUrls)
 				{
