@@ -26,7 +26,7 @@ public class QualityInfo{
 		//parse file and add entrys to map
 		Files.lines(qualityFilePath).forEach(line -> {
 			count[0]++; 
-			if(count[0] % 100000 == 0){
+			if(count[0] % 1000000 == 0){
 				System.out.println("QualityInfo parsed: "+count[0]+" lines");
 			}
 			if(count[0] % 5000000 == 0){

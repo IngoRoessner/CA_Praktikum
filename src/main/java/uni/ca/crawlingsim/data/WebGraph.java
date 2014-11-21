@@ -22,7 +22,7 @@ public class WebGraph {
 		// parse file and adds entrys to the edges map
 		Files.lines(graphFilePath).forEach( line -> {
 			count[0]++; 
-			if(count[0] % 100000 == 0){
+			if(count[0] % 1000000 == 0){
 				System.out.println("WebGraph parsed: "+count[0]+" lines");
 			}
 			if(count[0] % 5000000 == 0){

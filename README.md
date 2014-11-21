@@ -15,6 +15,7 @@ It is planed as a simulator of crawling strategies.
 ##Run
 * go to the subdirectory 'traget'
 * call: `java -jar .\crawlingsim-1.jar SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY`
+* optional with more memory: `java -Xms2048m -Xmx2048m -jar .\crawlingsim-1.jar...`
 
 | Parameter       |   Type        | Description |
 | ----------------|---------------| -------------|
