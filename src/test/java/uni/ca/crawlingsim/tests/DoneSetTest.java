@@ -23,46 +23,56 @@ public class DoneSetTest {
 	}
 	@Test
 	public void test2() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		DoneSet done = new DoneSet();
+		
 		List<String> testUrls = new ArrayList<String>();
 		for(int i=1; i<2000; i++)
 		{
 			testUrls.add(String.valueOf(i));
 			if(i==998)
 			{
+				DoneSet done = new DoneSet();
 				done.add(testUrls);
-				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(1)));
 				assertTrue(done.contains(String.valueOf(998)));
 				assertTrue(!done.contains(String.valueOf(999)));
 				assertTrue(!done.contains(String.valueOf(1000)));
 				assertTrue(!done.contains(String.valueOf(2000)));
+				done.close();
 			}
 			if(i==999)
 			{
+				DoneSet done = new DoneSet();
 				done.add(testUrls);
-				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(1)));
 				assertTrue(done.contains(String.valueOf(998)));
 				assertTrue(done.contains(String.valueOf(999)));
 				assertTrue(!done.contains(String.valueOf(1000)));
 				assertTrue(!done.contains(String.valueOf(2000)));
+				done.close();
 			}
 			if(i==1000)
 			{
+				DoneSet done = new DoneSet();
 				done.add(testUrls);
-				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(1)));
 				assertTrue(done.contains(String.valueOf(998)));
 				assertTrue(done.contains(String.valueOf(999)));
 				assertTrue(done.contains(String.valueOf(1000)));
+				assertTrue(!done.contains(String.valueOf(1001)));
 				assertTrue(!done.contains(String.valueOf(2000)));
+				done.close();
 			}
 			if(i==2000)
 			{
+				DoneSet done = new DoneSet();
 				done.add(testUrls);
-				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(1)));
 				assertTrue(done.contains(String.valueOf(998)));
 				assertTrue(done.contains(String.valueOf(999)));
 				assertTrue(done.contains(String.valueOf(1000)));
+				assertTrue(done.contains(String.valueOf(1001)));
 				assertTrue(done.contains(String.valueOf(2000)));
+				done.close();
 			}
 		}
 		

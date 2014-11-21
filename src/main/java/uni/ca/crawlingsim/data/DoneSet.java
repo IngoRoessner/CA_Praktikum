@@ -37,11 +37,10 @@ public class DoneSet {
 		if(urls.size() > 0){
 			StringBuilder sb = new StringBuilder("");
 			boolean firstLine = true;
-			for(int i = 0;i<(urls.size()/999); i++)
+			for(int i = 0;i<(urls.size()/999.0); i++)
 			{
-				List<String> subUrls = urls.subList(i*1000, i*1000+999);
-				if(i*1000+999>urls.size()) 
-					subUrls = urls.subList(i*1000, urls.size());
+				int maxUrls = ((i*1000+999<urls.size())? i*1000+999 : urls.size());
+				List<String> subUrls = urls.subList(i*1000-i, maxUrls);
 				for (String s : subUrls)
 				{
 					if(!firstLine){
