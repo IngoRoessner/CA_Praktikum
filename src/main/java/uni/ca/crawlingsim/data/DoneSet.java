@@ -37,21 +37,27 @@ public class DoneSet {
 		if(urls.size() > 0){
 			StringBuilder sb = new StringBuilder("");
 			boolean firstLine = true;
-			for (String s : urls)
+			for(int i = 0;i<(urls.size()/999); i++)
 			{
-				if(!firstLine){
-					sb.append(", ");
-				}else{
-					firstLine = false;
+				List<String> subUrls = urls.subList(i*1000, i*1000+999);
+				if(i*999>urls.size()) 
+					subUrls = urls.subList(i*1000, urls.size());
+				for (String s : subUrls)
+				{
+					if(!firstLine){
+						sb.append(", ");
+					}else{
+						firstLine = false;
+					}
+					sb.append("('"); 
+				    sb.append(s); 
+				    sb.append("')"); 
 				}
-				sb.append("('"); 
-			    sb.append(s); 
-			    sb.append("')"); 
+				Statement statement = data.createStatement();
+				statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
+				statement.close();
+				data.commit();
 			}
-			Statement statement = data.createStatement();
-			statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
-			statement.close();
-			data.commit();
 		}
 	}
 

@@ -3,6 +3,8 @@ package uni.ca.crawlingsim.tests;
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -19,5 +21,23 @@ public class DoneSetTest {
 		assertTrue(done.contains("b"));
 		assertTrue(!done.contains("c"));
 	}
-
+	@Test
+	public void test2() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		DoneSet done = new DoneSet();
+		List<String> testUrls = new ArrayList<String>();
+		for(int i=0; i<2000; i++)
+		{
+			testUrls.add(String.valueOf(i));
+			if(i==998)
+				done.add(testUrls);
+			if(i==999)
+				done.add(testUrls);
+			if(i==1000)
+				done.add(testUrls);
+			if(i==2000)
+				done.add(testUrls);
+		}
+		
+	}
+	
 }
