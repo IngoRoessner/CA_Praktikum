@@ -25,17 +25,45 @@ public class DoneSetTest {
 	public void test2() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		DoneSet done = new DoneSet();
 		List<String> testUrls = new ArrayList<String>();
-		for(int i=0; i<2000; i++)
+		for(int i=1; i<2000; i++)
 		{
 			testUrls.add(String.valueOf(i));
 			if(i==998)
+			{
 				done.add(testUrls);
+				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(998)));
+				assertTrue(!done.contains(String.valueOf(999)));
+				assertTrue(!done.contains(String.valueOf(1000)));
+				assertTrue(!done.contains(String.valueOf(2000)));
+			}
 			if(i==999)
+			{
 				done.add(testUrls);
+				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(998)));
+				assertTrue(done.contains(String.valueOf(999)));
+				assertTrue(!done.contains(String.valueOf(1000)));
+				assertTrue(!done.contains(String.valueOf(2000)));
+			}
 			if(i==1000)
+			{
 				done.add(testUrls);
+				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(998)));
+				assertTrue(done.contains(String.valueOf(999)));
+				assertTrue(done.contains(String.valueOf(1000)));
+				assertTrue(!done.contains(String.valueOf(2000)));
+			}
 			if(i==2000)
+			{
 				done.add(testUrls);
+				assertTrue(done.contains(String.valueOf(0)));
+				assertTrue(done.contains(String.valueOf(998)));
+				assertTrue(done.contains(String.valueOf(999)));
+				assertTrue(done.contains(String.valueOf(1000)));
+				assertTrue(done.contains(String.valueOf(2000)));
+			}
 		}
 		
 	}
