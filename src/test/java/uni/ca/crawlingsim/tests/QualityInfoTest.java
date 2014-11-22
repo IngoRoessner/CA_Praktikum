@@ -27,15 +27,4 @@ public class QualityInfoTest {
 		assertTrue(!quality.get("http://example.com/d"));
 	}
 
-	@Ignore
-	@Test
-	public void prodFileRunable() throws Exception{
-		String workingDirectory = System.getProperty("user.dir");
-		String location = "/test_resources/prod_sample/quality_mapping.txt";
-		assertTrue("no such file", Paths.get(workingDirectory, location).toFile().exists());
-		QualityInfo quality = new QualityInfo(Paths.get(workingDirectory, location));
-		bla(quality);
-	}
-	
-	void bla(QualityInfo a){}
 }
