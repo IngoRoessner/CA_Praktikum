@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -33,31 +34,44 @@ public class DoneSet {
 		this.add(Arrays.asList(url));
 	}
 	
-	public void add(List<String> urls) throws SQLException {
-		if(urls.size() > 0){
+	public void add(List<String> urls){
+		this.splitList(urls, 999).forEach(urlSublist -> {
 			StringBuilder sb = new StringBuilder("");
 			boolean firstLine = true;
-			for(int i = 0;i<(urls.size()/999.0); i++)
+			for (String s : urlSublist)
 			{
-				int maxUrls = ((i*1000+999<urls.size())? i*1000+999 : urls.size());
-				List<String> subUrls = urls.subList(i*1000-i, maxUrls);
-				for (String s : subUrls)
-				{
-					if(!firstLine){
-						sb.append(", ");
-					}else{
-						firstLine = false;
-					}
-					sb.append("('"); 
-				    sb.append(s); 
-				    sb.append("')"); 
+				if(!firstLine){
+					sb.append(", ");
+				}else{
+					firstLine = false;
 				}
-				Statement statement = data.createStatement();
+				sb.append("('"); 
+				sb.append(s); 
+				sb.append("')"); 
+			}
+			try {
+				Statement statement;
+				statement = data.createStatement();
 				statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
 				statement.close();
-				data.commit();
+				data.commit();			
+			} catch (Exception e) {
+				System.err.println("error at DoneSet::add()");
+			}
+		});
+	}
+	
+	private List<List<String>> splitList(List<String> list, int at){
+		List<List<String>> result = new ArrayList<List<String>>();
+		int start = 0;
+		for(int i=0; i<list.size(); i++){
+			int end = i+1;
+			if(end % at == 0 || end == list.size()){
+				result.add(list.subList(start, end));
+				start = end;
 			}
 		}
+		return result;
 	}
 
 	public boolean contains(String url) throws SQLException {

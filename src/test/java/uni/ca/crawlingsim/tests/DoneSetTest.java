@@ -2,9 +2,13 @@ package uni.ca.crawlingsim.tests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -21,6 +25,7 @@ public class DoneSetTest {
 		assertTrue(done.contains("b"));
 		assertTrue(!done.contains("c"));
 	}
+	
 	@Test
 	public void test2() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		
@@ -75,7 +80,15 @@ public class DoneSetTest {
 				done.close();
 			}
 		}
-		
+	}
+	
+	@Test
+	public void bigFile() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, IOException{
+		String workingDirectory = System.getProperty("user.dir");
+		String location = "/test_resources/big_done.txt";
+		List<String> bigDone = Files.lines(Paths.get(workingDirectory, location)).collect(Collectors.toList());
+		DoneSet done = new DoneSet();
+		done.add(bigDone);
 	}
 	
 }

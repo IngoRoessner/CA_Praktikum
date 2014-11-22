@@ -58,7 +58,7 @@ public class CrawlerTest {
 		location = "/test_resources/seed_small_5.txt";
 		assertTrue("no such file: "+location, Paths.get(workingDirectory, location).toFile().exists());
 		for(int i=1; i<6; i++){
-		//	this.test(Paths.get(workingDirectory, location), i);
+			this.test(Paths.get(workingDirectory, location), i);
 		}
 	}
 
