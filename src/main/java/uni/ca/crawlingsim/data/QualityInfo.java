@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +17,10 @@ public class QualityInfo{
 	
 	public static String tableName = "QualityInfo";
 	Data data;
-	private List<String> insertBuffer;
+	private List<List<String>> insertBuffer;
 	
 	public QualityInfo(Path qualityFilePath) throws Exception {
-		this.insertBuffer = new ArrayList<String>();
+		this.insertBuffer = new ArrayList<List<String>>();
 		this.data = new Data();
 		this.createTable();
 		final long[] count = new long[] {0L};
@@ -77,7 +78,7 @@ public class QualityInfo{
 	}
 	
 	private void addToTable(String url, boolean quality) throws SQLException{
-		this.insertBuffer.add(new StringBuilder().append("('").append(url).append("',").append(quality ? "TRUE" : "FALSE").append(")").toString());
+		this.insertBuffer.add(Arrays.asList(url, quality ? "TRUE" : "FALSE"));
 		if(this.insertBuffer.size() == Data.insertBufferSize){
 			this.flushInsertBuffer();
 		}

@@ -51,10 +51,10 @@ public class Crawler {
 	
 	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws Exception{
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		Future<QualityInfo> future_quality = executorService.submit(()-> new QualityInfo(qualityFilePath));
-		Future<WebGraph> future_graph = executorService.submit(()-> new WebGraph(graphFilePath));
-		QualityInfo qinfo = future_quality.get();	
-		WebGraph graph = future_graph.get();
+		//Future<WebGraph> future_graph = executorService.submit(()-> );
+		WebGraph graph = new WebGraph(graphFilePath);
+		//Future<QualityInfo> future_quality = executorService.submit(()-> );
+		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath);
 		this.init(graph, qinfo, out);
 	}
@@ -90,11 +90,12 @@ public class Crawler {
 			//System.out.println(new Date().toString() + ": getting quality...");
 			Map<String, QualityResultElement> quality = this.quality.get(links);
 				
-			this.stepQualityOut.count(quality);
-			
 			//no direct add to urlQueue as preparation for additional strategies
 			this.addUrlTakesToQueue(urlQueue, quality);
+			
+			this.stepQualityOut.count(quality);
 			this.stepQualityOut.printStepQuality();
+
 			if(i%100 == 0){
 				System.out.println(new Date().toString() + ": crawled steps: "+i);
 			}

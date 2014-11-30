@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class DoneSet {
 	private Data data;
 	public static String tableName = "DoneSetTable";
+	
 	public DoneSet() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
 		this.data = new Data();
 		this.createTable();
@@ -34,42 +35,28 @@ public class DoneSet {
 		this.add(Arrays.asList(url));
 	}
 	
-	public void add(List<String> urls){
-		this.splitList(urls, 999).forEach(urlSublist -> {
-			StringBuilder sb = new StringBuilder("");
-			boolean firstLine = true;
-			for (String s : urlSublist)
-			{
-				if(!firstLine){
-					sb.append(", ");
-				}else{
-					firstLine = false;
-				}
-				sb.append("('"); 
-				sb.append(s); 
-				sb.append("')"); 
-			}
+	public void add(List<String> urls) throws SQLException{
+		this.splitList(urls, Data.insertBufferSize).forEach(urlSublist -> {
 			try {
-				Statement statement;
-				statement = data.createStatement();
-				statement.execute("INSERT INTO "+tableName+" VALUES "+sb.toString());
-				statement.close();
-				data.commit();			
+				data.flushInsertBuffer(tableName, urlSublist, false);
 			} catch (Exception e) {
-				System.err.println("error at DoneSet::add()");
+				e.printStackTrace();
 			}
 		});
+		data.commit();
 	}
 	
-	private List<List<String>> splitList(List<String> list, int at){
-		List<List<String>> result = new ArrayList<List<String>>();
-		int start = 0;
+	private List<List<List<String>>> splitList(List<String> list, int at){
+		List<List<List<String>>> result = new ArrayList<List<List<String>>>();
+		List<List<String>> sublist = new ArrayList<List<String>>();
 		for(int i=0; i<list.size(); i++){
-			int end = i+1;
-			if(end % at == 0 || end == list.size()){
-				result.add(list.subList(start, end));
-				start = end;
+			sublist.add(Arrays.asList(list.get(i)));
+			if(i%Data.insertBufferSize == 0){
+				result.add(sublist);
 			}
+		}
+		if(sublist.size() > 0){
+			result.add(sublist);
 		}
 		return result;
 	}

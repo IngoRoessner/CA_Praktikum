@@ -53,11 +53,17 @@ Resources: ./test_resources
 UnitTests: uni.ca.crawlingsim.tests
 
 ###Classes
-uni.ca.crawlingsim.webgraph.WebGraph.java :
-parses and contains web graph structure
+uni.ca.crawlingsim.data.WebGraph.java :
+parses and contains web graph structure, using Data,java
 
-uni.ca.crawlingsim.quality.QualityInfo.java :
-parses and contains quality informations
+uni.ca.crawlingsim.data.QualityInfo.java :
+parses and contains quality informations, using Data.java
+
+uni.ca.crawlingsim.data.DoneSet.java : 
+a set of URLs, using Data.java
+
+uni.ca.crawlingsim.data.Data.java : 
+wrapper for the database
 
 uni.ca.crawlingsim.crawler.Crawler.java :
 creates WebGraph and QualityInfo, crawls and prints results through StepQualityOut

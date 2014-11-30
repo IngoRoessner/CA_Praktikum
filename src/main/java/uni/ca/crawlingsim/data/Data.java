@@ -36,10 +36,10 @@ public class Data {
 		openCount--;
 		if(openCount==0){
 			try {
-				DriverManager.getConnection(database + ";drop=true");
+				DriverManager.getConnection(database + ";shutdown=true");
 			} catch (SQLException e) {}
 			try {
-				DriverManager.getConnection(database + ";shutdown=true");
+				DriverManager.getConnection(database + ";drop=true");
 			} catch (SQLException e) {}
 		}
 	}
@@ -65,22 +65,32 @@ public class Data {
 		return connection.prepareStatement(string);
 	}
 	
-	public void flushInsertBuffer(String tableName, List<String> insertBuffer) throws SQLException {
-		StringBuilder sb = new StringBuilder("INSERT INTO "+tableName+" VALUES ");
-		boolean firstLine = true;
-		for (String s : insertBuffer)
-		{
-			if(!firstLine){
-				sb.append(",");	
-			}else{				
-				firstLine = false;
-			}
-		    sb.append(s);
-		}
+	public void flushInsertBuffer(String tableName, List<List<String>> insertBuffer) throws SQLException {
+		this.flushInsertBuffer(tableName, insertBuffer, true);
+	}
+	
+	public void flushInsertBuffer(String tableName, List<List<String>> insertBuffer, boolean toClear) throws SQLException {
 		if(insertBuffer.size() > 0){
-			Statement statement = this.createStatement();
-			statement.execute(sb.toString());
-			insertBuffer.clear();
+			int valueCount = insertBuffer.get(0).size();
+			String marcs = "";
+			for(int i = 0; i<valueCount; i++){
+				if(i>0){
+					marcs = marcs + ",";
+				}
+				marcs = marcs + "?";
+			}
+			PreparedStatement statement = this.prepareStatement("INSERT INTO "+tableName+" VALUES ("+marcs+")");
+			for (List<String> s : insertBuffer){
+				for(int i = 0; i<valueCount && i<s.size(); i++){
+					statement.setString(i+1, s.get(i));				
+				}
+				statement.addBatch();
+			}
+			statement.executeBatch();
+			statement.close();
+			if(toClear){
+				insertBuffer.clear();				
+			}
 		}
 	}
 	
