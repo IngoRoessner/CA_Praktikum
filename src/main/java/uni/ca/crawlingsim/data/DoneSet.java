@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,14 @@ public class DoneSet {
 		Statement statement = data.createStatement();
 		statement.execute("create table "+tableName+" (url varchar(64))");
 		statement.close();
+		this.createIndex();
 		data.commit();
+	}
+	
+	private void createIndex() throws SQLException {
+		Statement statement = data.createStatement();
+		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(url)");
+		statement.close();
 	}
 
 	public void add(String url) throws SQLException {
@@ -82,6 +90,7 @@ public class DoneSet {
 		}
 		StringBuilder sb = new StringBuilder("");
 		boolean firstLine = true;
+		//System.out.println(new Date().toString() + ": build sb...");
 		for (String s : links)
 		{
 			if(!firstLine){
@@ -93,14 +102,20 @@ public class DoneSet {
 		    sb.append(s); 
 		    sb.append("'"); 
 		}
+		//System.out.println(new Date().toString() + ": sb to string...");
+		String sbString = sb.toString();
 		HashSet<String> filter = new HashSet<String>();
 		Statement statement = data.createStatement();
-		ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE url IN ("+sb.toString()+")");
+		//System.out.println(new Date().toString() + ": execute statement...");
+		ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE url IN ("+sbString+")");
+		//System.out.println(new Date().toString() + ": read statement results...");
 		while (resultSet.next()) {
 			filter.add(resultSet.getString("url"));
 		}
+		//System.out.println(new Date().toString() + ": close...");
 		resultSet.close();
 		statement.close();
+		//System.out.println(new Date().toString() + ": remove used links...");
 		return links.stream().filter(link -> !filter.contains(link)).collect(Collectors.toList());
 	}
 	
