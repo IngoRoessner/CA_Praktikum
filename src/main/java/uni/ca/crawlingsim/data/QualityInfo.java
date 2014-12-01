@@ -19,6 +19,12 @@ public class QualityInfo{
 	Data data;
 	private List<List<String>> insertBuffer;
 	
+	//use existing quality info in db
+	public QualityInfo() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
+		this.data = new Data();
+	}
+	
+	//create new db table and parse quality info
 	public QualityInfo(Path qualityFilePath) throws Exception {
 		this.insertBuffer = new ArrayList<List<String>>();
 		this.data = new Data();

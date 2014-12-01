@@ -26,9 +26,7 @@ public class Crawler {
 	private StepQualityOut stepQualityOut;
 	
 	public static void main(String[] args) throws Exception{
-		if(args.length != 6){
-			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
-		}else{
+		if(args.length == 6){
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
 			Path graphFilePath = Paths.get(args[1]);
 			Path qualityFilePath = Paths.get(args[2]);
@@ -40,20 +38,38 @@ public class Crawler {
 			System.out.println(new Date().toString() + ": crawl graph...");
 			crawler.run(seed, takesPerStep, maxSteps);
 			System.out.println(new Date().toString() + ": finished");
+			crawler.close();			
+		}else if(args.length == 4){
+			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
+			int maxSteps = Integer.parseInt(args[1]);
+			int takesPerStep = Integer.parseInt(args[2]);
+			Path stepQualityOutPath = Paths.get(args[3]);
+			Crawler crawler = new Crawler(new WebGraph(), new QualityInfo(), new StepQualityOut(stepQualityOutPath));
+			System.out.println(new Date().toString() + ": crawl graph...");
+			crawler.run(seed, takesPerStep, maxSteps);
+			System.out.println(new Date().toString() + ": finished");
 			crawler.close();
-		}		
+		}else if(args.length == 2){
+			System.out.println(new Date().toString() + ": parse files...");
+			Path graphFilePath = Paths.get(args[0]);
+			Path qualityFilePath = Paths.get(args[1]);
+			WebGraph wgraph = new WebGraph(graphFilePath);
+			QualityInfo qinfo = new QualityInfo(qualityFilePath);
+			wgraph.close();
+			qinfo.close();
+		}else{
+			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
+			System.out.println("SEED_FILE MAX_STEPS TAKES_PER_STEP STEP_QUALITY");
+			System.out.println("WEB_GRAPH QUALITY_MAPPING");
+		}	
 	}
 	
-
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut){
 		this.init(webGraph, qualityInfo, stepQualityOut);
 	}
 	
 	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath) throws Exception{
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		//Future<WebGraph> future_graph = executorService.submit(()-> );
 		WebGraph graph = new WebGraph(graphFilePath);
-		//Future<QualityInfo> future_quality = executorService.submit(()-> );
 		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath);
 		this.init(graph, qinfo, out);

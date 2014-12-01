@@ -15,6 +15,12 @@ public class WebGraph {
 	public static String tableName = "WebGraph";
 	private List<List<String>> insertBuffer;
 
+	//use existing infos from db
+	public WebGraph() throws Exception{
+		this.data = new Data();
+	}
+	
+	//create new db table and parse infos from file
 	public WebGraph(Path graphFilePath) throws Exception {
 		this.insertBuffer = new ArrayList<List<String>>();
 		this.data = new Data();
