@@ -30,7 +30,7 @@ public class QualityInfo{
 			if(count[0] % 1000000 == 0){
 				System.out.println("QualityInfo parsed: "+count[0]+" lines");
 			}
-			if(count[0] % 5000000 == 0){
+			if(count[0] % 2000000 == 0){
 				try {
 					data.commit();
 				} catch (Exception e) {
