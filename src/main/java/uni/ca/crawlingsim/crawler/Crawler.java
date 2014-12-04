@@ -8,22 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
-
-import uni.ca.crawlingsim.data.DoneSet;
+import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.data.QualityInfo;
 import uni.ca.crawlingsim.data.WebGraph;
-import uni.ca.crawlingsim.data.QualityInfo.QualityResultElement;
+import uni.ca.crawlingsim.scheduling.Scheduler;
 
 public class Crawler {
 	private WebGraph webGraph;
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
+	private Scheduler scheduler;
 	
 	public static void main(String[] args) throws Exception{
 		if(args.length == 6){
@@ -86,30 +81,19 @@ public class Crawler {
 	}
 	
 	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
-		this.stepQualityOut.open();
-		PriorityQueue<String> urlQueue = new PriorityQueue<String>(seed);	
+		this.stepQualityOut.open();	
 		seed.forEach(s -> this.stepQualityOut.count(true));
-		DoneSet done = new DoneSet();
-		done.add(seed);
-		//if maxSteps = -1: run until  urlQueue.isEmpty()
-		for(int i = 0; i != maxSteps && !urlQueue.isEmpty(); i++){
+		for(int i = 0; i != maxSteps && !this.scheduler.isEmpty(); i++){
 			List<String> urls = new ArrayList<String>();
-			for(int j = 0; j<takesPerStep && !urlQueue.isEmpty(); j++){
-				String url = urlQueue.poll();
+			for(int j = 0; j<takesPerStep && !this.scheduler.isEmpty(); j++){
+				String url = this.scheduler.poll();
 				urls.add(url);
 			}
-			//System.out.println(new Date().toString() + ": getting linkls...");
-			List<String> links = webGraph.linksFrom(urls);
-			//System.out.println(new Date().toString() + ": filter linkls by done...");
-			links = done.filter(links);
-			done.add(links);
-			//System.out.println(new Date().toString() + ": getting quality...");
-			Map<String, QualityResultElement> quality = this.quality.get(links);
-				
-			//no direct add to urlQueue as preparation for additional strategies
-			this.addUrlTakesToQueue(urlQueue, quality);
+			List<Link> links = webGraph.linksFrom(urls);
+			this.quality.setQuality(links);
+			this.scheduler.addAll(links);
 			
-			this.stepQualityOut.count(quality);
+			this.stepQualityOut.count(links);
 			this.stepQualityOut.printStepQuality();
 
 			if(i%100 == 0){
@@ -117,11 +101,6 @@ public class Crawler {
 			}
 		}
 		this.stepQualityOut.close();
-		done.close();
-	}
-
-	private void addUrlTakesToQueue(PriorityQueue<String> urlQueue, Map<String, QualityResultElement> urlTakes) {
-		urlQueue.addAll(urlTakes.values().stream().map(element -> element.url).collect(Collectors.toList()));
 	}
 	
 	public void close() throws SQLException {

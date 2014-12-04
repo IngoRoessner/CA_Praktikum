@@ -85,14 +85,14 @@ public class WebGraph {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 	
-	public List<String> linksFrom(String url) throws SQLException {
+	public List<Link> linksFrom(String url) throws SQLException {
 		List<String> urls = new ArrayList<String>();
 		urls.add(url);
 		return linksFrom(urls);
 	}
 	
-	public List<String> linksFrom(List<String> urls) throws SQLException {
-		List<String> result = new ArrayList<String>();	
+	public List<Link> linksFrom(List<String> urls) throws SQLException {
+		List<Link> result = new ArrayList<Link>();	
 		StringBuilder sb = new StringBuilder("");
 		boolean firstLine = true;
 		for (String s : urls)
@@ -108,11 +108,12 @@ public class WebGraph {
 		}
 		Statement statement = data.createStatement();
 		ResultSet resultSet = statement.executeQuery(
-				"SELECT to_url FROM "+tableName+
+				"SELECT from_url, to_url FROM "+tableName+
 				" WHERE from_url IN ("+sb.toString()+")"
 		);
 		while (resultSet.next()) {
-			result.add(resultSet.getString("to_url"));
+			Link link = new Link(resultSet.getString("from_url"), resultSet.getString("to_url"));
+			result.add(link);
 		}
 		resultSet.close();
 		statement.close();

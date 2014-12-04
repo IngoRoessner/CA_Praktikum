@@ -4,9 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.Map;
+import java.util.List;
 
-import uni.ca.crawlingsim.data.QualityInfo.QualityResultElement;
+import uni.ca.crawlingsim.data.Link;
 
 public class StepQualityOut {
 	private FileWriter writer;
@@ -40,9 +40,9 @@ public class StepQualityOut {
 		writer.write(Double.toString(qualityresult) + System.lineSeparator());
 	}
 
-	public void count(Map<String, QualityResultElement> quality) {
-		quality.forEach((key, value)->{
-			this.count(value.quality);
+	public void count(List<Link> quality) {
+		quality.forEach((link)->{
+			this.count(link.quality);
 		});
 	}
 
