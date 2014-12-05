@@ -84,15 +84,14 @@ public class Crawler {
 		this.stepQualityOut.open();	
 		seed.forEach(s -> this.stepQualityOut.count(true));
 		for(int i = 0; i != maxSteps && !this.scheduler.isEmpty(); i++){
-			List<String> urls = new ArrayList<String>();
+			List<Link> links = new ArrayList<>();
 			for(int j = 0; j<takesPerStep && !this.scheduler.isEmpty(); j++){
 				String url = this.scheduler.poll();
-				urls.add(url);
+				List<Link> steplinks = webGraph.linksFrom(url);
+				this.scheduler.addAll(steplinks);
+				links.addAll(steplinks);
 			}
-			List<Link> links = webGraph.linksFrom(urls);
-			this.quality.setQuality(links);
-			this.scheduler.addAll(links);
-			
+			this.quality.setQuality(links);		
 			this.stepQualityOut.count(links);
 			this.stepQualityOut.printStepQuality();
 

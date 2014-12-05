@@ -2,6 +2,7 @@ package uni.ca.crawlingsim.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -86,31 +87,14 @@ public class WebGraph {
 	}
 	
 	public List<Link> linksFrom(String url) throws SQLException {
-		List<String> urls = new ArrayList<String>();
-		urls.add(url);
-		return linksFrom(urls);
-	}
-	
-	public List<Link> linksFrom(List<String> urls) throws SQLException {
 		List<Link> result = new ArrayList<Link>();	
-		StringBuilder sb = new StringBuilder("");
-		boolean firstLine = true;
-		for (String s : urls)
-		{
-			if(!firstLine){
-				sb.append(", ");
-			}else{
-				firstLine = false;
-			}
-			sb.append("'"); 
-		    sb.append(s); 
-		    sb.append("'"); 
-		}
-		Statement statement = data.createStatement();
-		ResultSet resultSet = statement.executeQuery(
+		PreparedStatement statement = data.prepareStatement(
 				"SELECT from_url, to_url FROM "+tableName+
-				" WHERE from_url IN ("+sb.toString()+")"
+				" WHERE from_url = ?"
 		);
+		statement.setString(1, url);
+		statement.execute();
+		ResultSet resultSet = statement.getResultSet();
 		while (resultSet.next()) {
 			Link link = new Link(resultSet.getString("from_url"), resultSet.getString("to_url"));
 			result.add(link);
