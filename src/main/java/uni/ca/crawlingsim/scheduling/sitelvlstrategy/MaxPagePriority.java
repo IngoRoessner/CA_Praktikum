@@ -2,7 +2,6 @@ package uni.ca.crawlingsim.scheduling.sitelvlstrategy;
 
 import java.util.List;
 
-import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.Page;
 import uni.ca.crawlingsim.scheduling.SchedulterInterface;
 import uni.ca.crawlingsim.scheduling.Site;
@@ -15,7 +14,7 @@ public class MaxPagePriority implements SiteLevelStrategy{
 		this.setRanks(scheduler.getQueue());
 	}
 
-	private void setRanks(List<Site> sites){
+	public void setRanks(List<Site> sites){
 		sites.stream().parallel().forEach(site->{this.setRank(site);});
 	}
 	
