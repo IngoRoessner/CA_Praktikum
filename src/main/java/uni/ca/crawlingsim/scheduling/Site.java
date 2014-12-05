@@ -28,8 +28,8 @@ public class Site {
 		this.rank = rank;
 	}
 
-	public List<Page> getDoneList() {
-		return this.done.values().stream().collect(Collectors.toList());
+	public Map<String, Page> getDone() {
+		return this.done;
 	}
 
 	public String getUrl() {

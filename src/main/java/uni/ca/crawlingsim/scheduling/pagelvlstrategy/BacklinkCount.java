@@ -31,8 +31,10 @@ public class BacklinkCount implements PageLevelStrategy {
 
 	@Override
 	public void setRanks(SchedulterInterface schedulter) {
-		this.setRanks(schedulter.getDone());
 		this.setRanks(schedulter.getQueue());
+		schedulter.getDone().forEach((key, value)->{
+			this.setRank(value);
+		});
 	}
 
 	public void setRanks(List<Site> sites) {
@@ -40,22 +42,28 @@ public class BacklinkCount implements PageLevelStrategy {
 	}
 	
 	private void setRank(Site site) {
-		this.setPageRanks(site.getDoneList());
 		this.setPageRanks(site.getQueue());
+		site.getDone().forEach((key, value)->{
+			this.setPageRank(value);
+		});
 	}
 
 
 	private void setPageRanks(List<Page> pages) {
 		pages.forEach(page->{
-			Integer backLinks = this.backlinks.get(page.getUrl());
-			int backLinksInt;
-			if(backLinks == null){
-				backLinksInt = 0;
-			}else{
-				backLinksInt = backLinks.intValue();
-			}
-			page.setRank(backLinksInt);
+			this.setPageRank(page);
 		});
+	}
+	
+	private void setPageRank(Page page){
+		Integer backLinks = this.backlinks.get(page.getUrl());
+		int backLinksInt;
+		if(backLinks == null){
+			backLinksInt = 0;
+		}else{
+			backLinksInt = backLinks.intValue();
+		}
+		page.setRank(backLinksInt);
 	}
 
 }
