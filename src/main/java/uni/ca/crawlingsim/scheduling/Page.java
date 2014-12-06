@@ -3,8 +3,10 @@ package uni.ca.crawlingsim.scheduling;
 public class Page {
 	private int rank;
 	private String url;
+	public boolean done;
 	
 	public Page(String url){
+		this.done = false;
 		this.url = url;
 		this.rank = 0;
 	}

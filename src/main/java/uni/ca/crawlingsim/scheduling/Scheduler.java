@@ -16,7 +16,7 @@ import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
 public class Scheduler implements SchedulterInterface{
 	private PageLevelStrategy pageLevelStrategy;
 	private SiteLevelStrategy siteLevelStrategy;
-	private Map<String, Site> done;
+	private Map<String, Site> sites;
 	private List<Site> queue;
 	private int batch;
 	private int batchCounter;
@@ -24,7 +24,7 @@ public class Scheduler implements SchedulterInterface{
 	public Scheduler(PageLevelStrategy pls, SiteLevelStrategy sls, int batch){
 		this.pageLevelStrategy = pls;
 		this.siteLevelStrategy = sls;
-		this.done = new HashMap<String, Site>();
+		this.sites = new HashMap<String, Site>();
 		this.queue = new LinkedList<Site>();
 		this.batch = batch;
 		this.batchCounter = 0;
@@ -40,7 +40,7 @@ public class Scheduler implements SchedulterInterface{
 		Site site = this.queue.get(0);
 		String result = site.poll();
 		if(site.isEmpty()){
-			this.done.put(site.getUrl(), site);
+			site.done = true;
 			this.queue.remove(0);
 		}
 		return result;
@@ -58,37 +58,20 @@ public class Scheduler implements SchedulterInterface{
 	public boolean isEmpty() {
 		return this.queue.isEmpty();
 	}
-
-	@Override
-	public Map<String, Site> getDone() {
-		return this.done;
-	}
-
-	@Override
-	public List<Site> getQueue() {
-		return this.queue;
-	}
 	
 	private void addLink(Link link) {
 		String siteUrl = this.getSiteUrl(link.to);
 		Site site;
-		boolean siteIsDone = false;
-		if(this.done.containsKey(siteUrl)){
-			siteIsDone = true;
-			site = this.done.get(siteUrl);
-		}else{
-			Optional<Site> siteOpt = this.queue.stream().filter((element)->{return element.getUrl().equals(siteUrl);}).findFirst();
-			if(siteOpt.isPresent()){
-				site = siteOpt.get();
-			}else{
-				site = new Site(siteUrl);
-				this.queue.add(site);
-			}
+		site = this.sites.get(siteUrl);
+		if(site == null){
+			site = new Site(siteUrl);
+			this.sites.put(siteUrl, site);
+			this.queue.add(site);
 		}
 		site.add(link);
-		if(siteIsDone && !site.isEmpty()){
+		if(site.done && !site.isEmpty()){
+			site.done = false;
 			this.queue.add(site);
-			this.done.remove(siteUrl);
 		}
 	}
 
@@ -109,5 +92,15 @@ public class Scheduler implements SchedulterInterface{
 			Link link = new Link("", url);
 			this.addLink(link);
 		}
+	}
+
+	@Override
+	public Map<String, Site> getSites() {
+		return this.sites;
+	}
+
+	@Override
+	public List<Site> getQueue() {
+		return this.queue;
 	}
 }

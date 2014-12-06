@@ -10,8 +10,7 @@ public class MaxPagePriority implements SiteLevelStrategy{
 
 	@Override
 	public void setRanks(SchedulterInterface scheduler) {
-		this.setRanks(scheduler.getQueue());
-		scheduler.getDone().forEach((key, value)->{
+		scheduler.getSites().forEach((key, value)->{
 			this.setRank(value);
 		});
 	}

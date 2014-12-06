@@ -30,28 +30,15 @@ public class BacklinkCount implements PageLevelStrategy {
 	}
 
 	@Override
-	public void setRanks(SchedulterInterface schedulter) {
-		this.setRanks(schedulter.getQueue());
-		schedulter.getDone().forEach((key, value)->{
+	public void setRanks(SchedulterInterface scheduler) {
+		scheduler.getSites().forEach((key, value)->{
 			this.setRank(value);
 		});
 	}
-
-	public void setRanks(List<Site> sites) {
-		sites.stream().parallel().forEach(site->{this.setRank(site);});
-	}
 	
-	private void setRank(Site site) {
-		this.setPageRanks(site.getQueue());
-		site.getDone().forEach((key, value)->{
+	public void setRank(Site site) {
+		site.getPages().forEach((key, value)->{
 			this.setPageRank(value);
-		});
-	}
-
-
-	private void setPageRanks(List<Page> pages) {
-		pages.forEach(page->{
-			this.setPageRank(page);
 		});
 	}
 	

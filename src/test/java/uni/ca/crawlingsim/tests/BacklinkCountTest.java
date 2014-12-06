@@ -13,6 +13,12 @@ import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
 
 public class BacklinkCountTest {
 
+	private void addPageToSite(Site site, String pageUrl){
+		Page page = new Page(pageUrl);
+		site.getPages().put(pageUrl, page);
+		site.getQueue().add(page);
+	}
+	
 	@Test
 	public void test() {
 		BacklinkCount blc = new BacklinkCount();
@@ -24,13 +30,11 @@ public class BacklinkCountTest {
 			new Link("d", "c")
 		));
 		Site site = new Site("");
-		site.getQueue().addAll(Arrays.asList(
-			new Page("a"),
-			new Page("b"),
-			new Page("c"),
-			new Page("d")
-		));
-		blc.setRanks(Arrays.asList(site));
+		addPageToSite(site, "a");
+		addPageToSite(site, "b");
+		addPageToSite(site, "c");
+		addPageToSite(site, "d");
+		blc.setRank(site);
 		for(Page page : site.getQueue()){
 			String url = page.getUrl();
 			switch(url){
@@ -57,7 +61,7 @@ public class BacklinkCountTest {
 			new Link("d", "c")
 		));
 		
-		blc.setRanks(Arrays.asList(site));
+		blc.setRank(site);
 		for(Page page : site.getQueue()){
 			String url = page.getUrl();
 			switch(url){
