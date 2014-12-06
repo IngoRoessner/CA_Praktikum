@@ -92,32 +92,34 @@ public class QualityInfo{
 	}
 	
 	public void setQuality(List<Link> links) throws SQLException{
-		StringBuilder sb = new StringBuilder("");
-		boolean firstLine = true;
-		for (Link link : links)
-		{
-			if(!firstLine){
-				sb.append(", ");
-			}else{
-				firstLine = false;
-			}
-			sb.append("'"); 
-		    sb.append(link.to); 
-		    sb.append("'"); 
-		}
-		
-		Statement statement = data.createStatement();
-		ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE quality = TRUE AND url IN ("+sb.toString()+")");
-		while (resultSet.next()) {
-			final String url = resultSet.getString("url");
-			links.forEach((link)->{
-				if(link.to.equals(url)){
-					link.quality = true;
+		if(!links.isEmpty()){			
+			StringBuilder sb = new StringBuilder("");
+			boolean firstLine = true;
+			for (Link link : links)
+			{
+				if(!firstLine){
+					sb.append(", ");
+				}else{
+					firstLine = false;
 				}
-			});
+				sb.append("'"); 
+				sb.append(link.to); 
+				sb.append("'"); 
+			}
+			
+			Statement statement = data.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE quality = TRUE AND url IN ("+sb.toString()+")");
+			while (resultSet.next()) {
+				final String url = resultSet.getString("url");
+				links.forEach((link)->{
+					if(link.to.equals(url)){
+						link.quality = true;
+					}
+				});
+			}
+			resultSet.close();
+			statement.close();
 		}
-		resultSet.close();
-		statement.close();
 	}
 
 	public void close() throws SQLException {

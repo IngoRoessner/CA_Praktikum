@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import uni.ca.crawlingsim.data.Link;

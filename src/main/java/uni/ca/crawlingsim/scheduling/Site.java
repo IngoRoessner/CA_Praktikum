@@ -1,11 +1,9 @@
 package uni.ca.crawlingsim.scheduling;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import uni.ca.crawlingsim.data.Link;
 
@@ -43,23 +41,29 @@ public class Site {
 	}
 
 	public String poll() {
-		// TODO Auto-generated method stub
-		return null;
+		Page page = this.queue.get(0);
+		String result = page.getUrl();
+		this.done.put(result, page);
+		this.queue.remove(0);
+		return result;
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.queue.isEmpty();
 	}
 
 	public void sort() {
-		// TODO Auto-generated method stub
-		
+		this.queue.sort((e1, e2)->{return e2.getRank() - e1.getRank();});
 	}
 
 	public void add(Link link) {
-		// TODO Auto-generated method stub
-		
+		String pageUrl = link.to;
+		if(
+			!this.done.containsKey(pageUrl) 
+			&& !this.queue.stream().anyMatch((element)->{return element.getUrl().equals(pageUrl);})
+		){
+			this.queue.add(new Page(pageUrl));
+		}
 	}
 	
 }

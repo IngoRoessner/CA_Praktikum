@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import uni.ca.crawlingsim.crawler.Crawler;
+import uni.ca.crawlingsim.scheduling.Scheduler;
 
 public class CrawlerTest {
 	private static String workingDirectory = System.getProperty("user.dir");
@@ -19,8 +20,8 @@ public class CrawlerTest {
 		Path graphFilePath = Paths.get(workingDirectory, "/test_resources/webgraph_small.txt");
 		Path qualityFilePath = Paths.get(workingDirectory, "/test_resources/quality_small.txt");
 		Path stepQualityOutPath = Paths.get(workingDirectory, "/test_resources/small_out.txt");
-		
-		Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath);
+		Scheduler scheduler = Crawler.getScheduler("foo", "foo", 100);
+		Crawler crawler = new Crawler(graphFilePath, qualityFilePath, stepQualityOutPath, scheduler);
 		
 		List<String> seed = Files.lines(path).collect(Collectors.toList());
 		crawler.run(seed, i);
