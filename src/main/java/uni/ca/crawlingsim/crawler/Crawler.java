@@ -120,16 +120,17 @@ public class Crawler {
 		for(int i = 0; i != maxSteps && !this.scheduler.isEmpty(); i++){
 			List<Link> links = new ArrayList<>();
 			for(int j = 0; j<takesPerStep && !this.scheduler.isEmpty(); j++){
-				String url = this.scheduler.poll();
+				String url = this.scheduler.poll();		
+				//System.out.println(new Date().toString() + ": quality out...");
+				this.stepQualityOut.count(this.quality.setQuality(url));
+				//System.out.println(new Date().toString() + ": getting linkls...");
 				List<Link> steplinks = webGraph.linksFrom(url);
+				//System.out.println(new Date().toString() + ": scheduler add ("+Integer.toString(steplinks.size())+")...");
 				this.scheduler.addAll(steplinks);
-				this.quality.setQuality(steplinks);		
 				links.addAll(steplinks);
 			}
-			this.stepQualityOut.count(links);
 			this.stepQualityOut.printStepQuality();
-
-			if(i%1 == 0){
+			if(i%100 == 0){
 				System.out.println(new Date().toString() + ": crawled steps: "+i);
 			}
 		}

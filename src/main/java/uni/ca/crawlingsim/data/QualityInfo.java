@@ -2,6 +2,7 @@ package uni.ca.crawlingsim.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -91,36 +92,18 @@ public class QualityInfo{
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 	
-	public void setQuality(List<Link> links) throws SQLException{
-		if(!links.isEmpty()){			
-			StringBuilder sb = new StringBuilder("");
-			boolean firstLine = true;
-			for (Link link : links)
-			{
-				if(!firstLine){
-					sb.append(", ");
-				}else{
-					firstLine = false;
-				}
-				sb.append("'"); 
-				sb.append(link.to); 
-				sb.append("'"); 
-			}
-			Statement statement = data.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT url, quality FROM "+tableName+" WHERE url IN ("+sb.toString()+")");
-			while (resultSet.next()) {
-				final String url = resultSet.getString("url");
-				if(resultSet.getBoolean("quality")){
-					links.parallelStream().forEach((link)->{
-						if(link.to.equals(url)){
-							link.quality = true;
-						}
-					});
-				}
-			}
-			resultSet.close();
-			statement.close();
+	public boolean setQuality(String url) throws SQLException{			
+		PreparedStatement statement = data.prepareStatement("SELECT quality FROM "+tableName+" WHERE url = ?");
+		statement.setString(1, url);
+		statement.execute();
+		ResultSet resultSet = statement.getResultSet();
+		boolean result = false;
+		if(resultSet.next()){
+			result = resultSet.getBoolean("quality");		
 		}
+		resultSet.close();
+		statement.close();
+		return result;
 	}
 
 	public void close() throws SQLException {

@@ -40,10 +40,4 @@ public class StepQualityOut {
 		writer.write(Double.toString(qualityresult) + System.lineSeparator());
 	}
 
-	public void count(List<Link> quality) {
-		quality.forEach((link)->{
-			this.count(link.quality);
-		});
-	}
-
 }
