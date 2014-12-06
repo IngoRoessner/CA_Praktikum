@@ -106,16 +106,17 @@ public class QualityInfo{
 				sb.append(link.to); 
 				sb.append("'"); 
 			}
-			
 			Statement statement = data.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT url FROM "+tableName+" WHERE quality = TRUE AND url IN ("+sb.toString()+")");
+			ResultSet resultSet = statement.executeQuery("SELECT url, quality FROM "+tableName+" WHERE url IN ("+sb.toString()+")");
 			while (resultSet.next()) {
 				final String url = resultSet.getString("url");
-				links.forEach((link)->{
-					if(link.to.equals(url)){
-						link.quality = true;
-					}
-				});
+				if(resultSet.getBoolean("quality")){
+					links.parallelStream().forEach((link)->{
+						if(link.to.equals(url)){
+							link.quality = true;
+						}
+					});
+				}
 			}
 			resultSet.close();
 			statement.close();

@@ -123,13 +123,13 @@ public class Crawler {
 				String url = this.scheduler.poll();
 				List<Link> steplinks = webGraph.linksFrom(url);
 				this.scheduler.addAll(steplinks);
+				this.quality.setQuality(steplinks);		
 				links.addAll(steplinks);
 			}
-			this.quality.setQuality(links);		
 			this.stepQualityOut.count(links);
 			this.stepQualityOut.printStepQuality();
 
-			if(i%100 == 0){
+			if(i%1 == 0){
 				System.out.println(new Date().toString() + ": crawled steps: "+i);
 			}
 		}

@@ -2,6 +2,7 @@ package uni.ca.crawlingsim.scheduling;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Scheduler implements SchedulterInterface{
 			this.pageLevelStrategy.setRanks(this);
 			this.siteLevelStrategy.setRanks(this);
 			this.queue.sort((e1, e2)->{return e2.getRank() - e1.getRank();});
-			this.queue.forEach(site->{site.sort();});
+			this.queue.parallelStream().forEach(site->{site.sort();});
 		}
 	}
 
