@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import uni.ca.crawlingsim.data.Link;
+
 public class Site {
 	private int rank;
 	private String url;
@@ -38,6 +40,26 @@ public class Site {
 
 	public List<Page> getQueue() {
 		return queue;
+	}
+
+	public String poll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void sort() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void add(Link link) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

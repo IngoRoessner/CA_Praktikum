@@ -81,6 +81,7 @@ public class Crawler {
 	}
 	
 	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
+		this.scheduler.setSeed(seed);
 		this.stepQualityOut.open();	
 		seed.forEach(s -> this.stepQualityOut.count(true));
 		for(int i = 0; i != maxSteps && !this.scheduler.isEmpty(); i++){
