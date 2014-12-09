@@ -10,18 +10,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Class WebGraph
+ * @author Ingo Rößner, Daniel Michalke
+ *	
+ */
 public class WebGraph {
 	private Data data;
 	public static String tableName = "WebGraph";
 	private List<List<String>> insertBuffer;
 
-	//use existing infos from db
+	/**
+	 * Consturctor WebGraph, using the existing values from the database
+	 * @throws Exception
+	 */
 	public WebGraph() throws Exception{
 		this.data = new Data();
 	}
-	
-	//create new db table and parse infos from file
+	/**
+	 * Constructor Webgraph, creates a new database table and parses all values from the file
+	 * @param graphFilePath
+	 * @throws Exception
+	 */
 	public WebGraph(Path graphFilePath) throws Exception {
 		this.insertBuffer = new ArrayList<List<String>>();
 		this.data = new Data();
@@ -55,14 +65,20 @@ public class WebGraph {
 		this.createIndex();
 		data.commit();
 	}
-
+	/**
+	 * Method createIndex
+	 * @throws SQLException
+	 */
 	private void createIndex() throws SQLException {
 		System.out.println(new Date().toString()+": create WebGraph index...");
 		Statement statement = data.createStatement();
 		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(from_url)");
 		statement.close();
 	}
-
+	/**
+	 * Method createTable
+	 * @throws Exception
+	 */
 	private void createTable() throws Exception {
 		if (data.containsTable(tableName)){
 			Statement statement = data.createStatement();
@@ -74,7 +90,12 @@ public class WebGraph {
 		statement.close();
 		this.data.commit();
 	}
-	
+	/**
+	 * Method addToTable
+	 * @param from
+	 * @param to
+	 * @throws SQLException
+	 */
 	private void addToTable(String from, String to) throws SQLException{
 		this.insertBuffer.add(Arrays.asList(from, to));
 		if(this.insertBuffer.size() == Data.insertBufferSize){
@@ -85,7 +106,12 @@ public class WebGraph {
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
-	
+	/**
+	 * Method linksFrom, gets url and looks in the database for links from the base url to others. gives back a list of links
+	 * @param url
+	 * @return list of links (to_urls) that lead from the base url to others
+	 * @throws SQLException
+	 */
 	public List<Link> linksFrom(String url) throws SQLException {
 		List<Link> result = new ArrayList<Link>();	
 		PreparedStatement statement = data.prepareStatement(
@@ -103,7 +129,10 @@ public class WebGraph {
 		statement.close();
 		return result;
 	}
-	
+	/**
+	 * Method Close, closes the database connection
+	 * @throws SQLException
+	 */
 	public void close() throws SQLException {
 		this.data.close();
 	}

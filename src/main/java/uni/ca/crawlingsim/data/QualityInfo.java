@@ -10,19 +10,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Class QualityInfo
+ * @author Ingo Rößner, Daniel Michalke
+ *
+ */
 public class QualityInfo{
 	
 	public static String tableName = "QualityInfo";
 	Data data;
 	private List<List<String>> insertBuffer;
 	
-	//use existing quality info in db
+	/**
+	 * Method QualityInfo, based on the existing qualityinfo in the database
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public QualityInfo() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
 		this.data = new Data();
 	}
 	
-	//create new db table and parse quality info
+	
+	/**
+	 * Constructor QualityInfo, creates a new Database table and parses the qualityinfo
+	 * @param qualityFilePath
+	 * @throws Exception
+	 */
 	public QualityInfo(Path qualityFilePath) throws Exception {
 		this.insertBuffer = new ArrayList<List<String>>();
 		this.data = new Data();
@@ -61,14 +76,20 @@ public class QualityInfo{
 		this.createIndex();
 		data.commit();
 	}
-	
+	/**
+	 * Method createIndex, indexes the database tables
+	 * @throws SQLException
+	 */
 	private void createIndex() throws SQLException {
 		System.out.println(new Date().toString()+": create QualityInfo index...");
 		Statement statement = data.createStatement();
 		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(url)");
 		statement.close();
 	}
-
+	/**
+	 * Method createTable
+	 * @throws Exception
+	 */
 	private void createTable() throws Exception {
 		if (data.containsTable(tableName)){
 			Statement statement = data.createStatement();
@@ -80,18 +101,31 @@ public class QualityInfo{
 		statement.close();
 		this.data.commit();
 	}
-	
+	/**
+	 * Method addtoTable, adds the Url and its quality to the table
+	 * @param url
+	 * @param quality
+	 * @throws SQLException
+	 */
 	private void addToTable(String url, boolean quality) throws SQLException{
 		this.insertBuffer.add(Arrays.asList(url, quality ? "TRUE" : "FALSE"));
 		if(this.insertBuffer.size() == Data.insertBufferSize){
 			this.flushInsertBuffer();
 		}
 	}
-
+	/**
+	 * Method flushinsertBuffer, calls data flushinsertbuffer method
+	 * @throws SQLException
+	 */
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
-	
+	/**
+	 * Method setQuality, retreives the quality for the url from the database
+	 * @param url
+	 * @return qualityvalue for the url(true or false)
+	 * @throws SQLException
+	 */
 	public boolean setQuality(String url) throws SQLException{			
 		PreparedStatement statement = data.prepareStatement("SELECT quality FROM "+tableName+" WHERE url = ?");
 		statement.setString(1, url);
@@ -105,7 +139,10 @@ public class QualityInfo{
 		statement.close();
 		return result;
 	}
-
+	/**
+	 * Method close, cals the method close in Data
+	 * @throws SQLException
+	 */
 	public void close() throws SQLException {
 		this.data.close();
 	}

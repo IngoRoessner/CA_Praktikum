@@ -7,7 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-
+/**
+ * Class Data, creates the Database and fills it
+ * @author Ingo Rößner, Daniel Michalke
+ *
+ */
 public class Data {
 	private static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	static {
@@ -23,13 +27,22 @@ public class Data {
 	private static int openCount = 0;
 
 	private Connection connection;
-	
+	/**
+	 * Constructor Data, creates the Database
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public Data() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		openCount++;
 		this.connection = DriverManager.getConnection(database + ";create=true");
 		this.connection.setAutoCommit(false);
 	}
-	
+	/**
+	 * Method close, closes the Database connection
+	 * @throws SQLException
+	 */
 	public void close() throws SQLException{
 		this.commit();
 		connection.close();
@@ -43,7 +56,12 @@ public class Data {
 			} catch (SQLException e) {}
 		}
 	}
-	
+	/**
+	 * Method containsTable, checks if the table is already in the database
+	 * @param table
+	 * @return boolean value, if the table is already in the database
+	 * @throws SQLException
+	 */
 	public boolean containsTable(String table) throws SQLException{
 		ResultSet resultSet = connection.getMetaData().getTables(null, null, null,
 				new String[] { "TABLE" });
@@ -56,19 +74,39 @@ public class Data {
 		resultSet.close();
 		return result;
 	}
-
+	/**
+	 * Method createStatement
+	 * @return statement based on the current connection
+	 * @throws SQLException
+	 */
 	public Statement createStatement() throws SQLException {
 		return connection.createStatement();
 	}
-
+	/**
+	 * Method preparedStatement
+	 * @param string
+	 * @return statement based on the current connection with the received string
+	 * @throws SQLException
+	 */
 	public PreparedStatement prepareStatement(String string) throws SQLException {
 		return connection.prepareStatement(string);
 	}
-	
+	/**
+	 * 
+	 * @param tableName
+	 * @param insertBuffer
+	 * @throws SQLException
+	 */
 	public void flushInsertBuffer(String tableName, List<List<String>> insertBuffer) throws SQLException {
 		this.flushInsertBuffer(tableName, insertBuffer, true);
 	}
-	
+	/**
+	 * Method flushInsertBuffer, creates the database statements for the insertion and executes them
+	 * @param tableName
+	 * @param insertBuffer
+	 * @param toClear
+	 * @throws SQLException
+	 */
 	public void flushInsertBuffer(String tableName, List<List<String>> insertBuffer, boolean toClear) throws SQLException {
 		if(insertBuffer.size() > 0){
 			int valueCount = insertBuffer.get(0).size();
@@ -93,7 +131,10 @@ public class Data {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @throws SQLException
+	 */
 	public void commit() throws SQLException{
 		this.connection.commit();
 	}

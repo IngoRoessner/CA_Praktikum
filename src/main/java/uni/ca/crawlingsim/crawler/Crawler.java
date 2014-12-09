@@ -18,13 +18,24 @@ import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.MaxPagePriority;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
-
+/**
+ * 
+ * @author Ingo Rößner, Daniel Michalke
+ * Class Crawler, Including Main function
+ * 
+ */
 public class Crawler {
 	private WebGraph webGraph;
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
 	private Scheduler scheduler;
-	
+	/**
+	 * Method Sheduler, creates a sheduler object based on the start parameters
+	 * @param plsType page level strategy type
+	 * @param slsType side level strategy type
+	 * @param batchSize 
+	 * @return sheduler object including the page and side strategy
+	 */
 	public static Scheduler getScheduler(String plsType, String slsType, int batchSize){
 		PageLevelStrategy pls;
 		SiteLevelStrategy sls;
@@ -49,7 +60,16 @@ public class Crawler {
 		Scheduler scheduler = new Scheduler(pls, sls, batchSize);
 		return scheduler;
 	}
-	
+	/**
+	 * can be started with one of the following parameter combinations
+	 * SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP PAGE_LVL_STRAT SITE_LVL_STRAT BATCH_SIZE STEP_QUALITY
+	 * SEED_FILE MAX_STEPS TAKES_PER_STEP BATCH_SIZE STEP_QUALITY 
+	 * WEB_GRAPH QUALITY_MAPPING
+	 * depending on the number of parameters it will create a new database and start the crawling process on it
+	 * or just do the crawling process on the existing database
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{
 		if(args.length == 9){
 			List<String> seed = Files.lines(Paths.get(args[0])).collect(Collectors.toList());
@@ -90,29 +110,68 @@ public class Crawler {
 			System.out.println("WEB_GRAPH QUALITY_MAPPING");
 		}	
 	}
-	
+	/**
+	 * Constructor Crawler, based on webgraph qualityinfo stepqualityout and sheduler objects calls the Method init with its parameters
+	 * @param webGraph
+	 * @param qualityInfo
+	 * @param stepQualityOut
+	 * @param scheduler
+	 */
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut, Scheduler scheduler){
 		this.init(webGraph, qualityInfo, stepQualityOut, scheduler);
 	}
-	
+	/**
+	 * Constructor Crawler, based on Path parameters, creates WegGraph, QualityInfo, StepQualityOut and sheduler objects and starts Init method with them
+	 * @param graphFilePath
+	 * @param qualityFilePath
+	 * @param stepQualityOutPath
+	 * @param scheduler
+	 * @throws Exception
+	 */
 	public Crawler(Path graphFilePath, Path qualityFilePath, Path stepQualityOutPath, Scheduler scheduler) throws Exception{
 		WebGraph graph = new WebGraph(graphFilePath);
 		QualityInfo qinfo = new QualityInfo(qualityFilePath);	
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath);
 		this.init(graph, qinfo, out, scheduler);
 	}
-	
+	/**
+	 * Method init, initializes the local paramters with the given parameters
+	 * @param webGraph
+	 * @param qualityInfo
+	 * @param stepQualityOut
+	 * @param scheduler
+	 */
 	private void init(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut, Scheduler scheduler) {
 		this.webGraph = webGraph;
 		this.quality = qualityInfo;
 		this.stepQualityOut = stepQualityOut;
 		this.scheduler = scheduler;
 	}
-	
+	/**
+	 * Method run, gets called if maxSteps is not entered, calls run method with paramter maxSteps = -1
+	 * only used by tests so far
+	 * @param seed
+	 * @param takesPerStep
+	 * @throws IOException
+	 * @throws SQLException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 */
 	public void run(List<String> seed, int takesPerStep)throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.run(seed, takesPerStep, -1);
 	}
-	
+	/**
+	 * Method run, starts the crawl process and writes the stepquality
+	 * @param seed
+	 * @param takesPerStep
+	 * @param maxSteps
+	 * @throws IOException
+	 * @throws SQLException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 */
 	public void run(List<String> seed, int takesPerStep, int maxSteps) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.scheduler.setSeed(seed);
 		this.stepQualityOut.open();	
@@ -121,11 +180,8 @@ public class Crawler {
 			List<Link> links = new ArrayList<>();
 			for(int j = 0; j<takesPerStep && !this.scheduler.isEmpty(); j++){
 				String url = this.scheduler.poll();		
-				//System.out.println(new Date().toString() + ": quality out...");
 				this.stepQualityOut.count(this.quality.setQuality(url));
-				//System.out.println(new Date().toString() + ": getting linkls...");
 				List<Link> steplinks = webGraph.linksFrom(url);
-				//System.out.println(new Date().toString() + ": scheduler add ("+Integer.toString(steplinks.size())+")...");
 				this.scheduler.addAll(steplinks);
 				links.addAll(steplinks);
 			}
@@ -136,7 +192,10 @@ public class Crawler {
 		}
 		this.stepQualityOut.close();
 	}
-	
+	/**
+	 * Method Close, closes the open files webgraph and quality
+	 * @throws SQLException
+	 */
 	public void close() throws SQLException {
 		this.webGraph.close();
 		this.quality.close();
