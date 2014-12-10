@@ -3,13 +3,13 @@ package uni.ca.crawlingsim.scheduling.sitelvlstrategy;
 import java.util.List;
 
 import uni.ca.crawlingsim.scheduling.Page;
-import uni.ca.crawlingsim.scheduling.SchedulterInterface;
+import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
 
 public class MaxPagePriority implements SiteLevelStrategy{
 
 	@Override
-	public void setRanks(SchedulterInterface scheduler) {
+	public void setRanks(SchedulerInterface scheduler) {
 		scheduler.getSites().forEach((key, value)->{
 			this.setRank(value);
 		});
@@ -29,5 +29,10 @@ public class MaxPagePriority implements SiteLevelStrategy{
 			}
 		}
 		site.setRank(maxRank);
+	}
+
+	@Override
+	public void donePollOn(SchedulerInterface scheduler, Site site) {
+		//do nothing
 	}
 }

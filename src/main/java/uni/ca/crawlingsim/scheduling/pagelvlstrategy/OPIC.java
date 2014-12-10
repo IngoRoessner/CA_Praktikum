@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import uni.ca.crawlingsim.data.Link;
-import uni.ca.crawlingsim.scheduling.SchedulterInterface;
+import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
 
 public class OPIC implements PageLevelStrategy {
@@ -19,7 +19,7 @@ public class OPIC implements PageLevelStrategy {
 	}
 	
 	@Override
-	public void setRanks(SchedulterInterface schedulter) {
+	public void setRanks(SchedulerInterface schedulter) {
 		schedulter.getSites().forEach((key, site) -> {
 			this.setRank(site);
 		});

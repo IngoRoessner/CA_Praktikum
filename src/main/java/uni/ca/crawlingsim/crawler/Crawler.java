@@ -18,6 +18,7 @@ import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.OPIC;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.MaxPagePriority;
+import uni.ca.crawlingsim.scheduling.sitelvlstrategy.RoundRobin;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
 /**
  * 
@@ -48,7 +49,7 @@ public class Crawler {
 				pls = new OPIC();
 				break;
 			default:
-				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['BacklinkCount']. use default 'BacklinkCount'");
+				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['BacklinkCount', 'OPIC']. use default 'BacklinkCount'");
 				pls = new BacklinkCount();
 				break;
 		}
@@ -56,8 +57,11 @@ public class Crawler {
 			case "MaxPagePriority":
 				sls = new MaxPagePriority();
 				break;
+			case "RoundRobin":
+				sls = new RoundRobin();
+				break;
 			default:
-				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['MaxPagePriority']. use default 'MaxPagePriority'");
+				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['MaxPagePriority', 'RoundRobin']. use default 'MaxPagePriority'");
 				sls = new MaxPagePriority();
 				break;
 		}

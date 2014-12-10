@@ -13,7 +13,7 @@ import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
 
-public class Scheduler implements SchedulterInterface{
+public class Scheduler implements SchedulerInterface{
 	private PageLevelStrategy pageLevelStrategy;
 	private SiteLevelStrategy siteLevelStrategy;
 	private Map<String, Site> sites;
@@ -43,15 +43,16 @@ public class Scheduler implements SchedulterInterface{
 			site.done = true;
 			this.queue.remove(0);
 		}
+		this.siteLevelStrategy.donePollOn(this, site);
 		return result;
 	}
 
 	private void setRanksAndSort() {
 		if(this.batchCounter++ % this.batch == 0){
 			this.pageLevelStrategy.setRanks(this);
+			this.pageLevelStrategy.sort(this);
 			this.siteLevelStrategy.setRanks(this);
-			this.queue.sort((e1, e2)->{return e2.getRank() - e1.getRank();});
-			this.queue.parallelStream().forEach(site->{site.sort();});
+			this.siteLevelStrategy.sort(this);
 		}
 	}
 

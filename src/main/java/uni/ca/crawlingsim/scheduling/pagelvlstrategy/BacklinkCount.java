@@ -6,7 +6,7 @@ import java.util.Map;
 
 import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.Page;
-import uni.ca.crawlingsim.scheduling.SchedulterInterface;
+import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
 
 public class BacklinkCount implements PageLevelStrategy {
@@ -30,7 +30,7 @@ public class BacklinkCount implements PageLevelStrategy {
 	}
 
 	@Override
-	public void setRanks(SchedulterInterface scheduler) {
+	public void setRanks(SchedulerInterface scheduler) {
 		scheduler.getSites().forEach((key, value)->{
 			this.setRank(value);
 		});
