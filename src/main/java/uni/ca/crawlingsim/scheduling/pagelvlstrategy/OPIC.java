@@ -7,9 +7,10 @@ import java.util.Map;
 
 import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.SchedulterInterface;
+import uni.ca.crawlingsim.scheduling.Site;
 
 public class OPIC implements PageLevelStrategy {
-	private static int startCash = 1000;
+	public static int startCash = 50000;
 	private static boolean onlySeedStartCash = true;
 	private Map<String, Integer> cashMap;
 	
@@ -19,7 +20,9 @@ public class OPIC implements PageLevelStrategy {
 	
 	@Override
 	public void setRanks(SchedulterInterface schedulter) {
-		
+		schedulter.getSites().forEach((key, site) -> {
+			this.setRank(site);
+		});
 	}
 
 	@Override
@@ -41,19 +44,29 @@ public class OPIC implements PageLevelStrategy {
 	}
 
 	private void addCash(String to, int toCash) {
-		int startCashFoNonSeed = onlySeedStartCash ? 0 : startCash;
+		int startCashForNonSeed = onlySeedStartCash ? 0 : startCash;
 		if(!this.cashMap.containsKey(to)){
-			this.cashMap.put(to, startCashFoNonSeed);
+			this.cashMap.put(to, startCashForNonSeed);
 		}
 		int origCash = this.cashMap.get(to);
 		this.cashMap.put(to, origCash + toCash);
 	}
 
+	/**
+	 * @param from
+	 * @return startCash: if url is seed url; sum of gotten casch if not
+	 */
 	private int getCash(String from) {
 		if(!this.cashMap.containsKey(from)){
 			this.cashMap.put(from, startCash);
 		}
 		return this.cashMap.get(from);	
+	}
+
+	public void setRank(Site site) {
+		site.getQueue().forEach((page)->{
+			page.setRank(this.getCash(page.getUrl()));
+		});
 	}
 
 }

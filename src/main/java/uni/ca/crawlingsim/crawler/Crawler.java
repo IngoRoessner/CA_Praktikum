@@ -15,12 +15,13 @@ import uni.ca.crawlingsim.data.QualityInfo;
 import uni.ca.crawlingsim.data.WebGraph;
 import uni.ca.crawlingsim.scheduling.Scheduler;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
+import uni.ca.crawlingsim.scheduling.pagelvlstrategy.OPIC;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.MaxPagePriority;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
 /**
  * 
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  * Class Crawler, Including Main function
  * 
  */
@@ -42,6 +43,9 @@ public class Crawler {
 		switch(plsType){
 			case "BacklinkCount":
 				pls = new BacklinkCount();
+				break;
+			case "OPIC":
+				pls = new OPIC();
 				break;
 			default:
 				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['BacklinkCount']. use default 'BacklinkCount'");
