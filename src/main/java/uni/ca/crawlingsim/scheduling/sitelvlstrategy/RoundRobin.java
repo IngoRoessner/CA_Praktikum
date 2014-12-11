@@ -12,7 +12,7 @@ public class RoundRobin implements SiteLevelStrategy {
 
 	@Override
 	public void donePollOn(SchedulerInterface scheduler, Site site) {
-		if(!site.isEmpty()){
+		if(!site.isEmpty() && scheduler.getQueue().get(0) == site){
 			scheduler.getQueue().remove(0);
 			scheduler.getQueue().add(site);
 		}
