@@ -2,7 +2,11 @@ package uni.ca.crawlingsim.scheduling.sitelvlstrategy;
 
 import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
-
+/**
+ * Class SiteleveSTrategy, interface for RoundRObin and maxpagepriority
+ * @author Ingo RÖßner, Daniel Michalke
+ *
+ */
 public interface SiteLevelStrategy {
 
 	void setRanks(SchedulerInterface scheduler);

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 /**
- * Class WebGraph
+ * Class WebGraph, creates the webgraph based on the file
  * @author Ingo Rößner, Daniel Michalke
  *	
  */
@@ -21,7 +21,7 @@ public class WebGraph {
 	private List<List<String>> insertBuffer;
 
 	/**
-	 * Consturctor WebGraph, using the existing values from the database
+	 * Constructor WebGraph, using the existing values from the database
 	 * @throws Exception
 	 */
 	public WebGraph() throws Exception{
@@ -66,7 +66,7 @@ public class WebGraph {
 		data.commit();
 	}
 	/**
-	 * Method createIndex
+	 * Method createIndex, creates index for the database insertion
 	 * @throws SQLException
 	 */
 	private void createIndex() throws SQLException {
@@ -76,7 +76,7 @@ public class WebGraph {
 		statement.close();
 	}
 	/**
-	 * Method createTable
+	 * Method createTable, creates database table
 	 * @throws Exception
 	 */
 	private void createTable() throws Exception {
@@ -91,7 +91,7 @@ public class WebGraph {
 		this.data.commit();
 	}
 	/**
-	 * Method addToTable
+	 * Method addToTable, adds every string between the from and to paramter in the List to the insertBuffer
 	 * @param from
 	 * @param to
 	 * @throws SQLException
@@ -102,7 +102,10 @@ public class WebGraph {
 			this.flushInsertBuffer();
 		}
 	}
-
+	/**
+	 * Method flushInsertBuffer, calls the flushInsertBuffer method in the data class
+	 * @throws SQLException
+	 */
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}

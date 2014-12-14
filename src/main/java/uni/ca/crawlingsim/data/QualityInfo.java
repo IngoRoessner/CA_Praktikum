@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 /**
- * Class QualityInfo
+ * Class QualityInfo, calculates the Quality Informations for every site/page
  * @author Ingo Rößner, Daniel Michalke
  *
  */
@@ -34,7 +34,7 @@ public class QualityInfo{
 	
 	
 	/**
-	 * Constructor QualityInfo, creates a new Database table and parses the qualityinfo
+	 * Constructor QualityInfo, creates a new Database table and parses the qualityinfo from the given path file to the database
 	 * @param qualityFilePath
 	 * @throws Exception
 	 */
@@ -87,7 +87,7 @@ public class QualityInfo{
 		statement.close();
 	}
 	/**
-	 * Method createTable
+	 * Method createTable, forms the database statement for the creationprozess
 	 * @throws Exception
 	 */
 	private void createTable() throws Exception {
@@ -114,14 +114,14 @@ public class QualityInfo{
 		}
 	}
 	/**
-	 * Method flushinsertBuffer, calls data flushinsertbuffer method
+	 * Method flushinsertBuffer, calls flushinsertbuffer method from the data class
 	 * @throws SQLException
 	 */
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
 	/**
-	 * Method setQuality, retreives the quality for the url from the database
+	 * Method setQuality, retrieves the quality for the url from the database
 	 * @param url
 	 * @return qualityvalue for the url(true or false)
 	 * @throws SQLException
@@ -140,7 +140,7 @@ public class QualityInfo{
 		return result;
 	}
 	/**
-	 * Method close, cals the method close in Data
+	 * Method close, calls the method close in Data
 	 * @throws SQLException
 	 */
 	public void close() throws SQLException {

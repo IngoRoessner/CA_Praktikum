@@ -92,7 +92,8 @@ public class Data {
 		return connection.prepareStatement(string);
 	}
 	/**
-	 * 
+	 * Method flushInsertBuffer, will only be called when flushInsertBufer is called without the 3. paramter toClear boolean,
+	 * calls flushInsertBuffer with boolean toClear as true
 	 * @param tableName
 	 * @param insertBuffer
 	 * @throws SQLException
@@ -132,7 +133,7 @@ public class Data {
 		}
 	}
 	/**
-	 * 
+	 * Method commit, commits the changes to the dbs
 	 * @throws SQLException
 	 */
 	public void commit() throws SQLException{
