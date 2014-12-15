@@ -23,7 +23,7 @@ public class OPICtest {
 	@Test
 	public void test() {
 		OPIC opic = new OPIC();
-		opic.incommingLinks(Arrays.asList(
+		opic.incomingLinks(Arrays.asList(
 			new Link("a", "b"),
 			new Link("a", "c"),
 			new Link("a", "d"),
@@ -62,7 +62,7 @@ public class OPICtest {
 			}
 		}
 		
-		opic.incommingLinks(Arrays.asList(
+		opic.incomingLinks(Arrays.asList(
 			new Link("a", "b"),
 			new Link("a", "c"),
 			new Link("a", "d"),

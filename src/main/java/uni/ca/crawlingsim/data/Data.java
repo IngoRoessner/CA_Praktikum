@@ -7,9 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
 /**
  * Class Data, creates the Database and fills it
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  *
  */
 public class Data {
@@ -27,6 +28,7 @@ public class Data {
 	private static int openCount = 0;
 
 	private Connection connection;
+	
 	/**
 	 * Constructor Data, creates the Database
 	 * @throws InstantiationException
@@ -39,6 +41,7 @@ public class Data {
 		this.connection = DriverManager.getConnection(database + ";create=true");
 		this.connection.setAutoCommit(false);
 	}
+	
 	/**
 	 * Method close, closes the Database connection
 	 * @throws SQLException
@@ -56,6 +59,7 @@ public class Data {
 			} catch (SQLException e) {}
 		}
 	}
+	
 	/**
 	 * Method containsTable, checks if the table is already in the database
 	 * @param table
@@ -74,6 +78,7 @@ public class Data {
 		resultSet.close();
 		return result;
 	}
+	
 	/**
 	 * Method createStatement
 	 * @return statement based on the current connection
@@ -82,6 +87,7 @@ public class Data {
 	public Statement createStatement() throws SQLException {
 		return connection.createStatement();
 	}
+	
 	/**
 	 * Method preparedStatement
 	 * @param string
@@ -91,6 +97,7 @@ public class Data {
 	public PreparedStatement prepareStatement(String string) throws SQLException {
 		return connection.prepareStatement(string);
 	}
+	
 	/**
 	 * Method flushInsertBuffer, will only be called when flushInsertBufer is called without the 3. paramter toClear boolean,
 	 * calls flushInsertBuffer with boolean toClear as true
@@ -101,6 +108,7 @@ public class Data {
 	public void flushInsertBuffer(String tableName, List<List<String>> insertBuffer) throws SQLException {
 		this.flushInsertBuffer(tableName, insertBuffer, true);
 	}
+	
 	/**
 	 * Method flushInsertBuffer, creates the database statements for the insertion and executes them
 	 * @param tableName
@@ -132,6 +140,7 @@ public class Data {
 			}
 		}
 	}
+	
 	/**
 	 * Method commit, commits the changes to the dbs
 	 * @throws SQLException

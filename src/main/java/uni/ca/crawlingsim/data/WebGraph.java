@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 /**
  * Class WebGraph, creates the webgraph based on the file
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  *	
  */
 public class WebGraph {
@@ -27,6 +28,7 @@ public class WebGraph {
 	public WebGraph() throws Exception{
 		this.data = new Data();
 	}
+
 	/**
 	 * Constructor Webgraph, creates a new database table and parses all values from the file
 	 * @param graphFilePath
@@ -65,6 +67,7 @@ public class WebGraph {
 		this.createIndex();
 		data.commit();
 	}
+	
 	/**
 	 * Method createIndex, creates index for the database insertion
 	 * @throws SQLException
@@ -75,6 +78,7 @@ public class WebGraph {
 		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(from_url)");
 		statement.close();
 	}
+	
 	/**
 	 * Method createTable, creates database table
 	 * @throws Exception
@@ -90,6 +94,7 @@ public class WebGraph {
 		statement.close();
 		this.data.commit();
 	}
+	
 	/**
 	 * Method addToTable, adds every string between the from and to paramter in the List to the insertBuffer
 	 * @param from
@@ -102,6 +107,7 @@ public class WebGraph {
 			this.flushInsertBuffer();
 		}
 	}
+	
 	/**
 	 * Method flushInsertBuffer, calls the flushInsertBuffer method in the data class
 	 * @throws SQLException
@@ -109,6 +115,7 @@ public class WebGraph {
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
+	
 	/**
 	 * Method linksFrom, gets url and looks in the database for links from the base url to others. gives back a list of links
 	 * @param url
@@ -132,6 +139,7 @@ public class WebGraph {
 		statement.close();
 		return result;
 	}
+	
 	/**
 	 * Method Close, closes the database connection
 	 * @throws SQLException

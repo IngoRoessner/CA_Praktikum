@@ -1,7 +1,7 @@
 package uni.ca.crawlingsim.scheduling.pagelvlstrategy;
 /**
  * Class OPIC implements the opic algorithm as a pagelvlstrategy
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  */
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,28 +16,31 @@ public class OPIC implements PageLevelStrategy {
 	public static int startCash = 50000;
 	private static boolean onlySeedStartCash = true;
 	private Map<String, Integer> cashMap;
+	
 	/**
 	 * Constructor OPUC initializes cashMap as a new HashMap of String and Integer
 	 */
 	public OPIC(){
 		this.cashMap = new HashMap<String, Integer>();
 	}
+	
 	/**
 	 * Method setRanks sets the rank for each site of the scheduler
 	 * @param scheduler SchedulerInterface
 	 */
 	@Override
-	public void setRanks(SchedulerInterface schedulter) {
-		schedulter.getSites().forEach((key, site) -> {
+	public void setRanks(SchedulerInterface scheduler) {
+		scheduler.getSites().forEach((key, site) -> {
 			this.setRank(site);
 		});
 	}
+	
 	/**
 	 * Method incomingLinks shares the saved cash in link.from to the belonging link.to and saves the new cash  spread in cashMap 
 	 * @param links List of Link elements
 	 */
 	@Override
-	public void incommingLinks(List<Link> links) {
+	public void incomingLinks(List<Link> links) {
 		Map<String, List<String>> linkMap = new HashMap<String, List<String>>();
 		for(Link link : links){
 			if(!linkMap.containsKey(link.from)){
@@ -53,6 +56,7 @@ public class OPIC implements PageLevelStrategy {
 			this.cashMap.put(from, 0);
 		});
 	}
+	
 	/**
 	 * Method addCash adds the Cash in the cashMap to the string
 	 * @param to String
@@ -78,6 +82,7 @@ public class OPIC implements PageLevelStrategy {
 		}
 		return this.cashMap.get(from);	
 	}
+	
 	/**
 	 * Method setRank, sets the rank for the given site
 	 * @param site

@@ -8,26 +8,29 @@ import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.Page;
 import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
+
 /**
  * Class BacklinkCount
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  *
  */
 public class BacklinkCount implements PageLevelStrategy {
 	
 	private Map<String, Integer> backlinks; 
+
 	/**
 	 * Constructor BacklinkCount, initializes a new backlinks as a HasmMap of Strings and Integer
 	 */
 	public BacklinkCount(){
 		this.backlinks = new HashMap<String, Integer>();
 	}
+	
 	/**
 	 * Method incomingLinks, searches a matching entry in the map and increases the value +1 for every link in the recieved list of links  
 	 *@param links List<Link>
 	 */
 	@Override
-	public void incommingLinks(List<Link> links) {
+	public void incomingLinks(List<Link> links) {
 		links.forEach(link->{
 			Integer backlinks = this.backlinks.get(link.to);
 			int backLinksCount = 0;
@@ -37,6 +40,7 @@ public class BacklinkCount implements PageLevelStrategy {
 			this.backlinks.put(link.to, backLinksCount+1);
 		});
 	}
+	
 	/**
 	 * Method setRanks, sets the ranks for every site in the recieved scheduler object
 	 */
@@ -46,6 +50,7 @@ public class BacklinkCount implements PageLevelStrategy {
 			this.setRank(value);
 		});
 	}
+	
 	/**
 	 * Method setRank, sets the rank for the site
 	 * @param site Sote
@@ -55,6 +60,7 @@ public class BacklinkCount implements PageLevelStrategy {
 			this.setPageRank(value);
 		});
 	}
+	
 	/**
 	 * Method setPageRank, sets the PageRank
 	 * @param page Page

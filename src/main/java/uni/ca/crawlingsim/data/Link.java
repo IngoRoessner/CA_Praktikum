@@ -1,7 +1,8 @@
 package uni.ca.crawlingsim.data;
+
 /**
  * Class Link, Object Link, consisting of 2 elements from and to
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  * 
  */
 public class Link{

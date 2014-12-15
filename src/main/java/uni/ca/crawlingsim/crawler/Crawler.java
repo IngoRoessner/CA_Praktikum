@@ -20,6 +20,7 @@ import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.MaxPagePriority;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.RoundRobin;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
+
 /**
  * 
  * @author Ingo R��ner, Daniel Michalke
@@ -31,6 +32,7 @@ public class Crawler {
 	private QualityInfo quality;
 	private StepQualityOut stepQualityOut;
 	private Scheduler scheduler;
+
 	/**
 	 * Method Sheduler, creates a sheduler object based on the start parameters
 	 * @param plsType page level strategy type
@@ -68,6 +70,7 @@ public class Crawler {
 		Scheduler scheduler = new Scheduler(pls, sls, batchSize);
 		return scheduler;
 	}
+	
 	/**
 	 * can be started with one of the following parameter combinations
 	 * SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP PAGE_LVL_STRAT SITE_LVL_STRAT BATCH_SIZE STEP_QUALITY
@@ -118,6 +121,7 @@ public class Crawler {
 			System.out.println("WEB_GRAPH QUALITY_MAPPING");
 		}	
 	}
+	
 	/**
 	 * Constructor Crawler, based on webgraph qualityinfo stepqualityout and sheduler objects calls the Method init with its parameters
 	 * @param webGraph
@@ -128,6 +132,7 @@ public class Crawler {
 	public Crawler(WebGraph webGraph, QualityInfo qualityInfo, StepQualityOut stepQualityOut, Scheduler scheduler){
 		this.init(webGraph, qualityInfo, stepQualityOut, scheduler);
 	}
+	
 	/**
 	 * Constructor Crawler, based on Path parameters, creates WegGraph, QualityInfo, StepQualityOut and sheduler objects and starts Init method with them
 	 * @param graphFilePath
@@ -142,6 +147,7 @@ public class Crawler {
 		StepQualityOut out = new StepQualityOut(stepQualityOutPath);
 		this.init(graph, qinfo, out, scheduler);
 	}
+	
 	/**
 	 * Method init, initializes the local paramters with the given parameters
 	 * @param webGraph
@@ -155,6 +161,7 @@ public class Crawler {
 		this.stepQualityOut = stepQualityOut;
 		this.scheduler = scheduler;
 	}
+	
 	/**
 	 * Method run, gets called if maxSteps is not entered, calls run method with paramter maxSteps = -1
 	 * only used by tests so far
@@ -169,6 +176,7 @@ public class Crawler {
 	public void run(List<String> seed, int takesPerStep)throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		this.run(seed, takesPerStep, -1);
 	}
+	
 	/**
 	 * Method run, starts the crawl process and writes the stepquality
 	 * @param seed
@@ -200,6 +208,7 @@ public class Crawler {
 		}
 		this.stepQualityOut.close();
 	}
+	
 	/**
 	 * Method Close, closes the open files webgraph and quality
 	 * @throws SQLException

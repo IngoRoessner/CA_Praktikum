@@ -12,9 +12,10 @@ import java.util.Optional;
 import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.SiteLevelStrategy;
+
 /**
  * Class Sheduler, implements page and site levestrategies
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  * 
  */
 public class Scheduler implements SchedulerInterface{
@@ -24,6 +25,7 @@ public class Scheduler implements SchedulerInterface{
 	private List<Site> queue;
 	private int batch;
 	private int batchCounter;
+
 	/**
 	 * Constructor Scheduler, sets the Page and Sitelevelstrategy based on the given parameters including the batchsize
 	 * initializes batchCounter to 0, and creates sites (HashMap of strings and Sites) and queue (LinkedList of Sites) objects
@@ -39,13 +41,15 @@ public class Scheduler implements SchedulerInterface{
 		this.batch = batch;
 		this.batchCounter = 0;
 	}
+	
 	/**
 	 * Method addAll, gets a List of Links and calls the pagelevelStrategy with them
 	 */
 	public void addAll(List<Link> links){
 		links.forEach(link->{this.addLink(link);});
-		this.pageLevelStrategy.incommingLinks(links);
+		this.pageLevelStrategy.incomingLinks(links);
 	}
+	
 	/**
 	 * Method poll, searches for the url with the highest priority removes it from the queue and gives it back as the result String
 	 */
@@ -60,6 +64,7 @@ public class Scheduler implements SchedulerInterface{
 		this.siteLevelStrategy.donePollOn(this, site);
 		return result;
 	}
+	
 	/**
 	 * Method setRankAndSort, when the batchsize is reached, the ranking functions of the strategies are called and the queues according to themsorted
 	 * 
@@ -72,6 +77,7 @@ public class Scheduler implements SchedulerInterface{
 			this.siteLevelStrategy.sort(this);
 		}
 	}
+	
 	/**
 	 * Method isEmpty, checks if the queue is empty
 	 * @return isEmpty boolean 
@@ -79,6 +85,7 @@ public class Scheduler implements SchedulerInterface{
 	public boolean isEmpty() {
 		return this.queue.isEmpty();
 	}
+	
 	/**
 	 * Method addLink, adds the recieving Link to the queue
 	 * @param link Link
@@ -114,6 +121,7 @@ public class Scheduler implements SchedulerInterface{
 			return "";
 		}
 	}
+	
 	/**
 	 * Method setSeed, adds every String in the List seed to the linkobject
 	 * @param seed List of Strings
@@ -124,6 +132,7 @@ public class Scheduler implements SchedulerInterface{
 			this.addLink(link);
 		}
 	}
+	
 	/**
 	 * Method getSites, returns sites
 	 * @return Map<String, Site> sites
@@ -132,6 +141,7 @@ public class Scheduler implements SchedulerInterface{
 	public Map<String, Site> getSites() {
 		return this.sites;
 	}
+	
 	/**
 	 * Method getQuere, returns the Queue
 	 * @return List<Site> queue

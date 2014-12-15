@@ -22,7 +22,7 @@ public class BacklinkCountTest {
 	@Test
 	public void test() {
 		BacklinkCount blc = new BacklinkCount();
-		blc.incommingLinks(Arrays.asList(
+		blc.incomingLinks(Arrays.asList(
 			new Link("a", "b"),
 			new Link("a", "c"),
 			new Link("c", "b"),
@@ -53,7 +53,7 @@ public class BacklinkCountTest {
 			}
 		}
 		
-		blc.incommingLinks(Arrays.asList(
+		blc.incomingLinks(Arrays.asList(
 			new Link("a", "b"),
 			new Link("a", "c"),
 			new Link("c", "b"),

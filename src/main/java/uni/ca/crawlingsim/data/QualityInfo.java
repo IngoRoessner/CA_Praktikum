@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 /**
  * Class QualityInfo, calculates the Quality Informations for every site/page
- * @author Ingo Rößner, Daniel Michalke
+ * @author Ingo Rï¿½ï¿½ner, Daniel Michalke
  *
  */
 public class QualityInfo{
@@ -76,6 +77,7 @@ public class QualityInfo{
 		this.createIndex();
 		data.commit();
 	}
+
 	/**
 	 * Method createIndex, indexes the database tables
 	 * @throws SQLException
@@ -86,6 +88,7 @@ public class QualityInfo{
 		statement.execute("CREATE INDEX "+tableName+"_index ON "+tableName+"(url)");
 		statement.close();
 	}
+	
 	/**
 	 * Method createTable, forms the database statement for the creationprozess
 	 * @throws Exception
@@ -101,6 +104,7 @@ public class QualityInfo{
 		statement.close();
 		this.data.commit();
 	}
+	
 	/**
 	 * Method addtoTable, adds the Url and its quality to the table
 	 * @param url
@@ -113,6 +117,7 @@ public class QualityInfo{
 			this.flushInsertBuffer();
 		}
 	}
+	
 	/**
 	 * Method flushinsertBuffer, calls flushinsertbuffer method from the data class
 	 * @throws SQLException
@@ -120,6 +125,7 @@ public class QualityInfo{
 	private void flushInsertBuffer() throws SQLException {
 		this.data.flushInsertBuffer(tableName, insertBuffer);
 	}
+	
 	/**
 	 * Method setQuality, retrieves the quality for the url from the database
 	 * @param url
@@ -139,6 +145,7 @@ public class QualityInfo{
 		statement.close();
 		return result;
 	}
+	
 	/**
 	 * Method close, calls the method close in Data
 	 * @throws SQLException
