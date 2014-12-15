@@ -14,59 +14,29 @@ It is planed as a simulator of crawling strategies.
 
 ##Run
 * go to the subdirectory 'traget'
-* call: `java -jar .\crawlingsim-1.jar SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP STEP_QUALITY`
+* call: `java -jar .\crawlingsim-1.jar SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP PAGE_LVL_STRAT SITE_LVL_STRAT BATCH_SIZE STEP_QUALITY`
+* if you only want to read the WebGraph and QualityMaping you can also write: `java -jar .\crawlingsim-1.jar WEB_GRAPH QUALITY_MAPPING`
+* if you only want to run the crawling without reading the WebGraph and QualityMaping you can also write: `java -jar .\crawlingsim-1.jar SEED_FILE MAX_STEPS TAKES_PER_STEP PAGE_LVL_STRAT SITE_LVL_STRAT BATCH_SIZE STEP_QUALITY`
 * optional with more memory: `java -Xms2048m -Xmx2048m -jar .\crawlingsim-1.jar...`
 
 | Parameter       |   Type        | Description |
 | ----------------|---------------| -------------|
-| SEED_FILE       | Path to File  | the file containing the seed urls |
-| WEB_GRAPH       | Path to File  | the file containing the webgraph |
-| QUALITY_MAPPING | Path to File  | the file containing the url to quality mapping|
-| MAX_STEPS       | integer       | limits the runtime, determines how much steps would be teken, if MAX_STEPS = -1 the simulator runs until all urls are downloadet |
-| TAKES_PER_STEP  | integer       | determines how much urls would be downloaded by each step |
-| STEP_QUALITY    | Path to File  | path to the output file |
+| `SEED_FILE`       | Path to File  | the file containing the seed urls |
+| `WEB_GRAPH`       | Path to File  | the file containing the webgraph |
+| `QUALITY_MAPPING` | Path to File  | the file containing the url to quality mapping|
+| `MAX_STEPS`       | integer       | limits the runtime, determines how much steps would be teken, if `MAX_STEPS` = -1 the simulator runs until all urls are downloadet |
+| `TAKES_PER_STEP`  | integer       | determines how much urls would be downloaded by each step |
+| `STEP_QUALITY`    | Path to File  | path to the output file |
+| `PAGE_LVL_STRAT`    | string (BacklinkCount | OPIC)  | which Page-Level-Strategy should be used. If chosen is unknown BacklinkCount will be used |
+| `SITE_LVL_STRAT`    | string (MaxPagePriority | RoundRobin)  | which Site-Level-Strategy should be used. If chosen is unknown MaxPagePriority will be used |
+| `BATCH_SIZE`    | integer | new ranks would be determined by the chosen strategies after each `BATCH_SIZE` steps |
 
 ###Example 1
-`java -jar .\crawlingsim-1.jar ..\test_resources\seed_small_1.txt ..\test_resources\webgraph_small.txt ..\test_resources\quality_small.txt -1 1 ..\test_resources\out.txt`
+`java -jar -Xmx4096m -Xms4096m .\crawlingsim-1.jar ..\test_resources\prod\seeds.txt ..\test_resources\prod\linkgraph_ids.txt ..\test_resources\prod\quality_mapping.txt 5000 200 plstrat slvlstrat 100 ..\test_resources\prod\backlinkcounter_maxpagerank_100.txt`
 
-runs until all files are downloaded, the output file will have the same count of lines as accessable urls exist
+reads WebGraph and QualityInfo and crawls with the default strategies with a batch size of 100
 
 ###Example 2
-`java -jar .\crawlingsim-1.jar ..\test_resources\seed_small_1.txt ..\test_resources\webgraph_small.txt ..\test_resources\quality_small.txt 1 1 ..\test_resources\out.txt`
+`java -jar -Xmx4096m -Xms4096m .\crawlingsim-1.jar ..\test_resources\prod\seeds.txt 5000 200 plstrat slvlstrat 500 ..\test_resources\prod\backlinkcounter_maxpagerank_500.txt`
 
-runs exactly one step with one download, the output file will have exactly one line
- 
-###Example 3
-`java -jar .\crawlingsim-1.jar ..\test_resources\seed_small_1.txt ..\test_resources\webgraph_small.txt ..\test_resources\quality_small.txt 1 2 ..\test_resources\out.txt`
-
-runs exactly one step with two downloads (if possible), the output file will have exactly one line
-
-###Example 4
-`java -jar .\crawlingsim-1.jar ..\test_resources\seed_small_1.txt ..\test_resources\webgraph_small.txt ..\test_resources\quality_small.txt 2 2 ..\test_resources\out.txt`
-
-runs two steps (if possible) with two downloads (if possible) for each step, the output file will have two line
-
-##Project Structure
-
-###Tests
-Resources: ./test_resources
-UnitTests: uni.ca.crawlingsim.tests
-
-###Classes
-uni.ca.crawlingsim.data.WebGraph.java :
-parses and contains web graph structure, using Data,java
-
-uni.ca.crawlingsim.data.QualityInfo.java :
-parses and contains quality informations, using Data.java
-
-uni.ca.crawlingsim.data.DoneSet.java : 
-a set of URLs, using Data.java
-
-uni.ca.crawlingsim.data.Data.java : 
-wrapper for the database
-
-uni.ca.crawlingsim.crawler.Crawler.java :
-creates WebGraph and QualityInfo, crawls and prints results through StepQualityOut
-
-uni.ca.crawlingsim.crawler.StepQualityOut.java
-prints the results into file
+crawls with the default strategies with a batch size of 500 without reading the WebgGraph or QualityInfo 

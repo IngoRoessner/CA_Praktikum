@@ -51,7 +51,7 @@ public class Crawler {
 				pls = new OPIC();
 				break;
 			default:
-				System.err.println(slsType+" not as Site-Level-Strategy found: chose from ['BacklinkCount', 'OPIC']. use default 'BacklinkCount'");
+				System.err.println(slsType+" not as Page-Level-Strategy found: chose from ['BacklinkCount', 'OPIC']. use default 'BacklinkCount'");
 				pls = new BacklinkCount();
 				break;
 		}
