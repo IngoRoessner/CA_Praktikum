@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import uni.ca.crawlingsim.data.Link;
 import uni.ca.crawlingsim.data.QualityInfo;
 import uni.ca.crawlingsim.data.WebGraph;
+import uni.ca.crawlingsim.precompile.AvgBackLinkFinder;
 import uni.ca.crawlingsim.scheduling.Scheduler;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.OPIC;
@@ -115,10 +116,13 @@ public class Crawler {
 			QualityInfo qinfo = new QualityInfo(qualityFilePath);
 			wgraph.close();
 			qinfo.close();
+		}else if(args.length == 1 && args[0].equals("AVGBLC")){
+			AvgBackLinkFinder.main(null);
 		}else{
 			System.out.println("SEED_FILE WEB_GRAPH QUALITY_MAPPING MAX_STEPS TAKES_PER_STEP PAGE_LVL_STRAT SITE_LVL_STRAT BATCH_SIZE STEP_QUALITY");
 			System.out.println("SEED_FILE MAX_STEPS TAKES_PER_STEP BATCH_SIZE STEP_QUALITY");
 			System.out.println("WEB_GRAPH QUALITY_MAPPING");
+			System.out.println("AVGBLC");
 		}	
 	}
 	

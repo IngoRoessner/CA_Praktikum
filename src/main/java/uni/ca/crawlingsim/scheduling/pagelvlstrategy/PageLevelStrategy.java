@@ -8,7 +8,7 @@ import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 
 public interface PageLevelStrategy {
 
-	void setRanks(SchedulerInterface schedulter);
+	void setRanks(SchedulerInterface scheduler);
 	void incomingLinks(List<Link> links);
 	default void sort(SchedulerInterface scheduler){
 		scheduler.getQueue().parallelStream().forEach(site->{site.sort();});

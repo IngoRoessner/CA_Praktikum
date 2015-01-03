@@ -5,11 +5,8 @@ import java.util.List;
 import uni.ca.crawlingsim.scheduling.Page;
 import uni.ca.crawlingsim.scheduling.SchedulerInterface;
 import uni.ca.crawlingsim.scheduling.Site;
-/**
- * Class MaxPagePriority 
- * @author Ingo R��ner, Daniel Michalke
- */
-public class MaxPagePriority implements SiteLevelStrategy{
+
+public class AvgPagePriority implements SiteLevelStrategy {
 	/**
 	 * method setRanks, sets the rank for the scheduler
 	 * @param scheduler SchedulerInterface
@@ -32,15 +29,15 @@ public class MaxPagePriority implements SiteLevelStrategy{
 	 * @param site
 	 */
 	private void setRank(Site site){
-		int maxRank = 0;
+		int sum = 0;
+		int count = 0;
 		List<Page> pages = site.getQueue();
 		for(Page page : pages){
 			int pageRank = page.getRank();
-			if(maxRank < pageRank){
-				maxRank = pageRank;				
-			}
+			sum += pageRank;
+			count++;
 		}
-		site.setRank(maxRank);
+		site.setRank(sum/count);
 	}
 	/**
 	 * Method donePollOn do nothing
@@ -51,4 +48,5 @@ public class MaxPagePriority implements SiteLevelStrategy{
 	public void donePollOn(SchedulerInterface scheduler, Site site) {
 		//do nothing
 	}
+
 }
