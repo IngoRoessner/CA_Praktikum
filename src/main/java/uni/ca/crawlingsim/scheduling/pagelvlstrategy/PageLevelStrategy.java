@@ -10,6 +10,11 @@ public interface PageLevelStrategy {
 
 	void setRanks(SchedulerInterface scheduler);
 	void incomingLinks(List<Link> links);
+	
+	default void setSeedSize(int size){
+		
+	}
+	
 	default void sort(SchedulerInterface scheduler){
 		scheduler.getQueue().parallelStream().forEach(site->{site.sort();});
 	}

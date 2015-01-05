@@ -17,6 +17,7 @@ import uni.ca.crawlingsim.precompile.AvgBackLinkFinder;
 import uni.ca.crawlingsim.scheduling.Scheduler;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.BacklinkCount;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.OPIC;
+import uni.ca.crawlingsim.scheduling.pagelvlstrategy.Optimal;
 import uni.ca.crawlingsim.scheduling.pagelvlstrategy.PageLevelStrategy;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.MaxPagePriority;
 import uni.ca.crawlingsim.scheduling.sitelvlstrategy.RoundRobin;
@@ -51,8 +52,11 @@ public class Crawler {
 			case "OPIC":
 				pls = new OPIC();
 				break;
+			case "OPTIMAL":
+				pls = new Optimal();
+				break;
 			default:
-				System.err.println(slsType+" not as Page-Level-Strategy found: chose from ['BacklinkCount', 'OPIC']. use default 'BacklinkCount'");
+				System.err.println(slsType+" not as Page-Level-Strategy found: chose from ['BacklinkCount', 'OPIC', 'OPTIMAL']. use default 'BacklinkCount'");
 				pls = new BacklinkCount();
 				break;
 		}

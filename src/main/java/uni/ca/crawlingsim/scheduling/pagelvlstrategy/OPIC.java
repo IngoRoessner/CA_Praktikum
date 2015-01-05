@@ -76,7 +76,7 @@ public class OPIC implements PageLevelStrategy {
 	 * @param from
 	 * @return startCash: if url is seed url; sum of gotten casch if not
 	 */
-	private int getCash(String from) {
+	public int getCash(String from) {
 		if(!this.cashMap.containsKey(from)){
 			this.cashMap.put(from, startCash);
 		}

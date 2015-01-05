@@ -61,11 +61,7 @@ public class BacklinkCount implements PageLevelStrategy {
 		});
 	}
 	
-	/**
-	 * Method setPageRank, sets the PageRank
-	 * @param page Page
-	 */
-	private void setPageRank(Page page){
+	public int getPageRank(Page page){
 		Integer backLinks = this.backlinks.get(page.getUrl());
 		int backLinksInt;
 		if(backLinks == null){
@@ -73,7 +69,15 @@ public class BacklinkCount implements PageLevelStrategy {
 		}else{
 			backLinksInt = backLinks.intValue();
 		}
-		page.setRank(backLinksInt);
+		return backLinksInt;
+	}
+	
+	/**
+	 * Method setPageRank, sets the PageRank
+	 * @param page Page
+	 */
+	private void setPageRank(Page page){
+		page.setRank(this.getPageRank(page));
 	}
 
 }

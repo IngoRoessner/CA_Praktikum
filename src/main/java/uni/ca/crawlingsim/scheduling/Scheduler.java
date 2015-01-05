@@ -131,6 +131,7 @@ public class Scheduler implements SchedulerInterface{
 			Link link = new Link("", url);
 			this.addLink(link);
 		}
+		this.pageLevelStrategy.setSeedSize(seed.size());
 	}
 	
 	/**
