@@ -15,6 +15,11 @@ public class Optimal implements PageLevelStrategy {
 	private int size_of_queue;
 	static private double avgBlc = 15.9;
 
+	public Optimal(){
+		this.opic = new OPIC();
+		this.blc = new BacklinkCount();
+	}
+
 	private int getOpicRank(Page page){
 		return this.opic.getCash(page.getUrl());
 	}
