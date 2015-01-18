@@ -9,7 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import uni.ca.crawlingsim.data.Data;
-
+/**
+ * 
+ * @author Ingo RÖßner, Daniel Michalke
+ * Class AvgBackLinkFinder initializes Data object, declares the SQL query and calculates the average BacklinkCount. Needed for the Optimal Algorithm
+ * 
+ */
 public class AvgBackLinkFinder {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Data data = new Data();
